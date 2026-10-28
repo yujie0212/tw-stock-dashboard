@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-29T00:51:12+08:00",
+  "trade_date": "2026-10-29",
+  "universe_count": null,
+  "channel": "test",
+  "pipeline": {
+    "status": "failed",
+    "finished_at": null,
+    "error": "自動日曆只覆核已過去或當日 18:00 後的日期，不預判未來"
+  },
+  "strategies": {
+    "short": {
+      "label": "短線",
+      "status": "active",
+      "holding": null,
+      "note": "今日報告未產生",
+      "picks": []
+    },
+    "swing": {
+      "label": "波段",
+      "status": "active",
+      "holding": null,
+      "note": "今日報告未產生",
+      "picks": []
+    },
+    "long": {
+      "label": "中長線",
+      "status": "paused",
+      "holding": null,
+      "note": "暫停正式推播：季財報資料與研究驗證完成前不提供此策略名單",
+      "picks": []
+    }
+  },
+  "market": {
+    "taiex": {
+      "close": null,
+      "change": null,
+      "change_pct": null,
+      "history": []
+    },
+    "otc": {
+      "close": null,
+      "change": null,
+      "change_pct": null,
+      "history": []
+    },
+    "institutional": {
+      "foreign": null,
+      "trust": null,
+      "dealer": null
+    }
+  },
+  "validation": {
+    "status": "pending",
+    "note": "回測尚未完成",
+    "rules": [
+      "每段期間、每個持有天數都要通過，策略才算通過",
+      "每段至少 30 筆完整結果（其中至少 30 筆可和大盤比較）",
+      "扣除手續費與證交稅後，平均報酬大於 0",
+      "平均超額報酬（減去大盤）大於 0"
+    ],
+    "strategies": {
+      "short": {
+        "label": "短線",
+        "status": "pending",
+        "periods": [
+          {
+            "label": "2023 H2–2024",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          },
+          {
+            "label": "2025",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          },
+          {
+            "label": "2026",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          }
+        ]
+      },
+      "swing": {
+        "label": "波段",
+        "status": "pending",
+        "periods": [
+          {
+            "label": "2023 H2–2024",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          },
+          {
+            "label": "2025",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          },
+          {
+            "label": "2026",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          }
+        ]
+      }
+    }
+  },
+  "schedule": [
+    {
+      "time": "08:07",
+      "name": "盤前訊息",
+      "detail": "備援 08:29",
+      "status": "failed"
+    },
+    {
+      "time": "18:45",
+      "name": "收盤後流程",
+      "detail": "抓行情、法人、指數 → 選股 → 推播",
+      "status": "failed"
+    },
+    {
+      "time": "明日",
+      "name": "盤前訊息",
+      "detail": "08:07，備援 08:29",
+      "status": "scheduled"
+    }
+  ],
+  "backfill": [
+    {
+      "name": "行情",
+      "status": "pending",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": null,
+      "note": null
+    },
+    {
+      "name": "法人買賣超",
+      "status": "running",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": null,
+      "note": "資料已到 2026-04-15"
+    },
+    {
+      "name": "指數",
+      "status": "pending",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": null,
+      "note": null
+    },
+    {
+      "name": "回測",
+      "status": "pending",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": null,
+      "note": null
+    }
+  ]
+}

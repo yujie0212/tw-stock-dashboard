@@ -108,10 +108,11 @@ body::before {
 }
 
 /* Tabs */
-.tabs { display: flex; gap: 4px; padding: 0 16px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tabs { display: flex; gap: 4px; padding: 0 16px; border-bottom: 1px solid var(--line); overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
 .tab {
   background: none; border: 0; font: inherit; color: var(--muted); cursor: pointer;
-  padding: 8px 10px 10px; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  padding: 8px 10px 10px; border-bottom: 2px solid transparent;
   display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
 }
 .tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); font-weight: 500; }

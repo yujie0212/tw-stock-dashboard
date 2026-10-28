@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#151c25">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>台股選股監控台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky status bar → one-line daily summary → picks (wide) beside market + gate → schedule & data strip */
+/* 固定深色主題 */
+:root {
+  --bg: #0d1218;
+  --surface: #151c25;
+  --line: #263140;
+  --fg: #e6ebf2;
+  --muted: #8e9bad;
+  --accent: #7fb0e6;
+  --accent-soft: #1b2a3b;
+  --up: #f0776b;      /* 台股慣例：紅漲 */
+  --down: #4cc492;    /* 綠跌 */
+  --warn: #e5b05c;
+  --warn-soft: #30271a;
+  --ok-soft: #142d23;
+  --up-soft: #3a1f1d;
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font-num: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface);
+}
+.num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+.up { color: var(--up); }
+.down { color: var(--down); }
+.wrap {
+  max-width: 1120px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Top bar */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.topbar .wrap {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+  padding-block: 12px;
+}
+.brand { display: flex; align-items: baseline; gap: 10px; margin-right: auto; }
+.brand h1 { font-size: 18px; margin: 0; font-weight: 700; letter-spacing: .02em; }
+.brand .date { color: var(--muted); font-size: 13px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 500; padding: 3px 10px; border-radius: 999px;
+  white-space: nowrap;
+}
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.pill.ok { background: var(--ok-soft); color: var(--down); }
+.pill.warn { background: var(--warn-soft); color: var(--warn); }
+.pill.idle { background: var(--accent-soft); color: var(--muted); }
+
+.demo-note {
+  font-size: 12.5px; color: var(--warn); background: var(--warn-soft);
+  padding: 8px 12px; border-radius: 6px; margin-top: 16px;
+}
+
+/* Summary line */
+.summary { padding-block: 20px 8px; }
+.summary p { margin: 0; font-size: 17px; max-width: 62ch; text-wrap: pretty; }
+.summary strong { font-weight: 700; }
+
+/* Main grid */
+.grid {
+  display: grid; gap: 16px; padding-block: 12px 32px;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  align-items: start;
+}
+.side { display: grid; gap: 16px; min-width: 0; }
+@media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+
+.panel {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  min-width: 0;
+}
+.panel-head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  padding: 14px 16px 10px;
+}
+.panel-head h2 { font-size: 15px; margin: 0; font-weight: 700; margin-right: auto; text-wrap: balance; }
+.label {
+  font-size: 11.5px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase;
+}
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; padding: 0 16px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tab {
+  background: none; border: 0; font: inherit; color: var(--muted); cursor: pointer;
+  padding: 8px 10px 10px; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); font-weight: 500; }
+.tab:focus-visible, .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.tab .count { font-family: var(--font-num); font-size: 12px; color: var(--muted); }
+.tab .paused { font-size: 11px; color: var(--warn); }
+
+.channel {
+  display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center;
+  padding: 10px 16px; font-size: 13px; color: var(--muted);
+}
+
+/* Picks table */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th {
+  text-align: left; font-weight: 500; font-size: 12px; color: var(--muted);
+  padding: 8px 16px; border-bottom: 1px solid var(--line); white-space: nowrap;
+}
+td { padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th.r, td.r { text-align: right; }
+.stock { display: flex; flex-direction: column; }
+.stock .code { font-family: var(--font-num); font-size: 12.5px; color: var(--muted); }
+.stock .name { font-weight: 500; white-space: nowrap; }
+.reason { color: var(--muted); font-size: 13px; min-width: 180px; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.tag { font-size: 11.5px; padding: 1px 7px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.empty { padding: 28px 16px; color: var(--muted); font-size: 14px; }
+.empty strong { color: var(--fg); display: block; margin-bottom: 4px; }
+
+/* Market */
+.market { padding: 0 16px 16px; display: grid; gap: 14px; }
+.index-row { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: end; }
+.index-row .name { font-size: 13px; color: var(--muted); }
+.index-row .val { font-family: var(--font-num); font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.index-row .chg { font-family: var(--font-num); font-size: 13px; text-align: right; }
+.spark { grid-column: 1 / -1; width: 100%; height: 44px; display: block; }
+.flows { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.flow { display: grid; grid-template-columns: 4.5em 1fr 6.5em; align-items: center; gap: 10px; font-size: 13px; }
+.flow .bar-track { height: 8px; background: var(--bg); border-radius: 4px; position: relative; overflow: hidden; }
+.flow .bar { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+.flow .bar-track::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--line); }
+.flow .amt { text-align: right; }
+
+/* Gate */
+.gate { padding: 0 16px 16px; display: grid; gap: 12px; }
+.gate-strategy { display: grid; gap: 6px; }
+.gate-strategy .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.gate-strategy .top b { font-size: 14px; }
+.periods { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.period { border: 1px dashed var(--line); border-radius: 6px; padding: 6px 8px; font-size: 12px; color: var(--muted); }
+.period .v { display: block; font-family: var(--font-num); color: var(--fg); font-size: 13px; margin-top: 2px; }
+.rules { margin: 0; padding: 10px 0 0; border-top: 1px solid var(--line); list-style: none; display: grid; gap: 4px; font-size: 12.5px; color: var(--muted); }
+.rules li::before { content: "·"; margin-right: 6px; color: var(--accent); font-weight: 700; }
+
+/* Bottom: schedule + data */
+.bottom { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding-bottom: 40px; }
+@media (max-width: 860px) { .bottom { grid-template-columns: minmax(0, 1fr); } }
+.timeline { list-style: none; margin: 0; padding: 0 16px 16px; display: grid; }
+.timeline li { display: grid; grid-template-columns: 3.6em 1fr auto; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); align-items: baseline; font-size: 14px; }
+.timeline li:first-child { border-top: 0; }
+.timeline .t { font-family: var(--font-num); font-weight: 500; }
+.timeline .d { color: var(--muted); font-size: 12.5px; display: block; }
+.progress-list { padding: 0 16px 16px; display: grid; gap: 12px; }
+.prog .row { display: flex; justify-content: space-between; gap: 8px; font-size: 13.5px; margin-bottom: 5px; }
+.prog .row span:last-child { color: var(--muted); font-family: var(--font-num); font-size: 12.5px; white-space: nowrap; }
+.prog .track { height: 6px; border-radius: 3px; background: var(--bg); overflow: hidden; }
+.prog .fill { height: 100%; background: var(--accent); border-radius: 3px; }
+.prog.done .fill { background: var(--down); }
+.prog .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+footer { color: var(--muted); font-size: 12px; padding-block: 0 32px; }
+
+@media (max-width: 520px) {
+  .summary p { font-size: 16px; }
+  .reason { min-width: 150px; }
+  th, td { padding-left: 12px; padding-right: 12px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .tab { transition: color .15s, border-color .15s; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <h1>台股選股監控台</h1>
+      <span class="date num">2026-10-28（三）</span>
+    </div>
+    <span class="pill ok">收盤後流程完成 18:52</span>
+    <span class="pill warn">測試頻道模式</span>
+  </div>
+</header>
+
+<main>
+  <section class="wrap summary" aria-label="今日摘要">
+    <div class="demo-note">示範頁面：所有股票、價格與數字都是範例，不是系統實際輸出。</div>
+    <p style="margin-top:14px">今日選出 <strong class="num">5</strong> 檔短線、<strong class="num">3</strong> 檔波段。策略驗證關卡尚未通過，訊號目前只送<strong>測試頻道</strong>。</p>
+  </section>
+
+  <div class="wrap grid">
+    <!-- Picks -->
+    <section class="panel" aria-labelledby="picks-title">
+      <div class="panel-head">
+        <h2 id="picks-title">今日選股</h2>
+        <span class="label">依收盤資料 · 上市櫃普通股 1,812 檔</span>
+      </div>
+      <div class="tabs" role="tablist" aria-label="策略">
+        <button class="tab" role="tab" id="tab-short" aria-selected="true" data-k="short">短線 <span class="count">5</span></button>
+        <button class="tab" role="tab" id="tab-swing" aria-selected="false" data-k="swing">波段 <span class="count">3</span></button>
+        <button class="tab" role="tab" id="tab-long" aria-selected="false" data-k="long">中長線 <span class="paused">暫停中</span></button>
+      </div>
+      <div class="channel" id="channel"></div>
+      <div id="picks"></div>
+    </section>
+
+    <div class="side">
+      <!-- Market -->
+      <section class="panel" aria-labelledby="mkt-title">
+        <div class="panel-head">
+          <h2 id="mkt-title">大盤概況</h2>
+          <span class="label">10/28 收盤</span>
+        </div>
+        <div class="market">
+          <div class="index-row">
+            <span class="name">加權指數</span><span></span>
+            <span class="val">23,418.62</span>
+            <span class="chg up">▲ 186.40<br>+0.80%</span>
+            <svg class="spark" id="spark-taiex" viewBox="0 0 300 44" preserveAspectRatio="none" aria-label="加權指數近 20 日走勢"></svg>
+          </div>
+          <div class="index-row">
+            <span class="name">櫃買指數</span><span></span>
+            <span class="val">261.07</span>
+            <span class="chg down">▼ 1.35<br>−0.51%</span>
+          </div>
+          <div class="flows" aria-label="三大法人買賣超">
+            <span class="label">三大法人買賣超（億元）</span>
+            <div class="flow"><span>外資</span><div class="bar-track"><div class="bar" style="left:50%;width:31%;background:var(--up)"></div></div><span class="amt num up">+128.4</span></div>
+            <div class="flow"><span>投信</span><div class="bar-track"><div class="bar" style="left:50%;width:9%;background:var(--up)"></div></div><span class="amt num up">+36.2</span></div>
+            <div class="flow"><span>自營商</span><div class="bar-track"><div class="bar" style="right:50%;width:5%;background:var(--down)"></div></div><span class="amt num down">−21.7</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Validation gate -->
+      <section class="panel" aria-labelledby="gate-title">
+        <div class="panel-head">
+          <h2 id="gate-title">策略驗證關卡</h2>
+          <span class="pill warn">尚未通過</span>
+        </div>
+        <div class="gate">
+          <div class="gate-strategy">
+            <div class="top"><b>短線</b><span class="pill idle">等待回測</span></div>
+            <div class="periods">
+              <div class="period">2023 H2–2024<span class="v">—</span></div>
+              <div class="period">2025<span class="v">—</span></div>
+              <div class="period">2026<span class="v">—</span></div>
+            </div>
+          </div>
+          <div class="gate-strategy">
+            <div class="top"><b>波段</b><span class="pill idle">等待回測</span></div>
+            <div class="periods">
+              <div class="period">2023 H2–2024<span class="v">—</span></div>
+              <div class="period">2025<span class="v">—</span></div>
+              <div class="period">2026<span class="v">—</span></div>
+            </div>
+          </div>
+          <ul class="rules">
+            <li>三段期間都要贏過大盤</li>
+            <li>扣除手續費與證交稅後仍為正報酬</li>
+            <li>每段至少 30 筆完整結果</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="wrap bottom">
+    <section class="panel" aria-labelledby="sched-title">
+      <div class="panel-head"><h2 id="sched-title">每日排程</h2><span class="label">台灣時間</span></div>
+      <ol class="timeline">
+        <li><span class="t">08:07</span><span>盤前訊息<span class="d">備援 08:29 自動補發</span></span><span class="pill ok">已送出</span></li>
+        <li><span class="t">13:30</span><span>收盤<span class="d">等待官方資料公布</span></span><span class="pill idle">—</span></li>
+        <li><span class="t">18:45</span><span>收盤後流程<span class="d">抓行情、法人、指數 → 選股 → 推播</span></span><span class="pill ok">完成</span></li>
+        <li><span class="t">明日</span><span>盤前訊息<span class="d">10/29 08:07</span></span><span class="pill idle">排程中</span></li>
+      </ol>
+    </section>
+
+    <section class="panel" aria-labelledby="data-title">
+      <div class="panel-head"><h2 id="data-title">歷史回補進度</h2><span class="label">一次性 · 回測用</span></div>
+      <div class="progress-list">
+        <div class="prog done">
+          <div class="row"><span>行情</span><span>2023-01 → 2026-10 · 完成</span></div>
+          <div class="track"><div class="fill" style="width:100%"></div></div>
+        </div>
+        <div class="prog">
+          <div class="row"><span>法人買賣超</span><span>16 / 90 批</span></div>
+          <div class="track"><div class="fill" style="width:17.8%"></div></div>
+          <div class="sub">資料已到 2023-08，預估今晚完成</div>
+        </div>
+        <div class="prog">
+          <div class="row"><span>指數</span><span>等待中</span></div>
+          <div class="track"><div class="fill" style="width:0%"></div></div>
+        </div>
+        <div class="prog">
+          <div class="row"><span>回測</span><span>等待中</span></div>
+          <div class="track"><div class="fill" style="width:0%"></div></div>
+          <div class="sub">三段期間：2023 H2–2024、2025、2026</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="wrap">資料來源：證交所、櫃買中心公開資料。本頁僅供個人研究參考，不構成投資建議。</footer>
+</main>
+
+<script>
+const PICKS = {
+  short: {
+    channel: '測試頻道 · 持有 1–5 個交易日',
+    rows: [
+      ['2330','台積電', 1085, 2.36, '量增突破 20 日高點', ['外資連 3 買']],
+      ['3231','緯創', 118.5, 4.87, '突破季線，成交量為 5 日均量 2.1 倍', ['投信買超']],
+      ['2382','廣達', 302.0, 1.85, '站回 10 日線，MACD 翻正', ['外資買超']],
+      ['6669','緯穎', 2410, 3.21, '多頭排列，回測 5 日線不破', ['投信連 2 買']],
+      ['3017','奇鋐', 865, -0.57, '高檔量縮整理，留意隔日方向', ['外資小賣']]
+    ]
+  },
+  swing: {
+    channel: '測試頻道 · 持有 2–8 週',
+    rows: [
+      ['2308','台達電', 412.5, 1.10, '週線三連紅，季線上彎', ['外資連 5 買']],
+      ['2454','聯發科', 1360, 0.74, '月線支撐有守，法人籌碼集中', ['投信買超']],
+      ['2603','長榮', 196.0, -1.26, '區間下緣，等待止跌訊號', ['外資回補']]
+    ]
+  },
+  long: { channel: '暫停中 · 依你的設定，中長線先不推播', rows: [] }
+};
+const fmt = (n) => n.toLocaleString('zh-TW', { minimumFractionDigits: n < 1000 ? 2 : 0, maximumFractionDigits: 2 });
+
+function render(k) {
+  const d = PICKS[k];
+  document.getElementById('channel').textContent = d.channel;
+  const box = document.getElementById('picks');
+  if (!d.rows.length) {
+    box.innerHTML = '<div class="empty"><strong>中長線策略暫停中</strong>恢復後，選股結果會顯示在這裡。</div>';
+    return;
+  }
+  box.innerHTML = '<div class="table-wrap"><table><thead><tr><th>股票</th><th class="r">收盤</th><th class="r">漲跌</th><th>選入原因</th></tr></thead><tbody>' +
+    d.rows.map(([c, n, p, chg, why, tags]) => {
+      const cls = chg > 0 ? 'up' : chg < 0 ? 'down' : '';
+      const sign = chg > 0 ? '+' : chg < 0 ? '−' : '';
+      return `<tr>
+        <td><div class="stock"><span class="name">${n}</span><span class="code">${c}</span></div></td>
+        <td class="r num">${fmt(p)}</td>
+        <td class="r num ${cls}">${sign}${Math.abs(chg).toFixed(2)}%</td>
+        <td class="reason">${why}<div class="tags">${tags.map(t => `<span class="tag">${t}</span>`).join('')}</div></td>
+      </tr>`;
+    }).join('') + '</tbody></table></div>';
+}
+
+document.querySelectorAll('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+    render(btn.dataset.k);
+    try { localStorage.setItem('tab', btn.dataset.k); } catch (e) {}
+  });
+});
+let start = 'short';
+try { start = localStorage.getItem('tab') || 'short'; } catch (e) {}
+if (!PICKS[start]) start = 'short';
+document.querySelector(`.tab[data-k="${start}"]`).click();
+
+// 20-day sparkline (sample values)
+(function () {
+  const v = [22710,22790,22650,22840,22930,22880,23010,22960,23105,23050,23180,23120,23240,23190,23060,23150,23210,23280,23232,23418];
+  const svg = document.getElementById('spark-taiex');
+  const W = 300, H = 44, pad = 4;
+  const min = Math.min(...v), max = Math.max(...v);
+  const x = i => i * (W / (v.length - 1));
+  const y = n => H - pad - (n - min) / (max - min) * (H - pad * 2);
+  const pts = v.map((n, i) => `${x(i).toFixed(1)},${y(n).toFixed(1)}`).join(' ');
+  svg.innerHTML =
+    `<polygon points="0,${H} ${pts} ${W},${H}" fill="var(--up)" fill-opacity=".10"></polygon>` +
+    `<polyline points="${pts}" fill="none" stroke="var(--up)" stroke-width="1.6" vector-effect="non-scaling-stroke"></polyline>`;
+})();
+</script>
+</body>
+</html>

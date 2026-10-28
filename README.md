@@ -2,7 +2,11 @@
 
 AI 台股智慧選股與監控系統的網站前端示範頁。
 
-> 目前是**示範版本**：頁面上的股票、價格與數字都是範例資料，尚未接上系統實際輸出。
+網頁讀取 `data/latest.json` 顯示內容，這份檔案由選股系統每天跑完流程後自動推上來。還沒有資料時，頁面會顯示「尚無資料」。
+
+- 實際資料：https://yujie0212.github.io/tw-stock-dashboard/
+- 範例畫面：https://yujie0212.github.io/tw-stock-dashboard/#demo（讀 `data/example.json`，數字都是範例）
+- 資料格式：[`data/SCHEMA.md`](data/SCHEMA.md)
 
 ## 頁面內容
 
@@ -16,4 +20,4 @@ AI 台股智慧選股與監控系統的網站前端示範頁。
 
 ## 檢視方式
 
-純靜態頁面，不需要建置。直接用瀏覽器打開 `index.html`，或開啟 GitHub Pages（Settings → Pages → Deploy from a branch → `main` / root）。
+純靜態頁面，不需要建置，由 GitHub Pages 從 `main` 分支根目錄發佈。本機預覽要用簡單的伺服器（例如 `python3 -m http.server`），直接雙擊 `index.html` 會因瀏覽器限制讀不到資料檔。

@@ -1,0 +1,346 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-28T18:52:10+08:00",
+  "trade_date": "2026-10-28",
+  "universe_count": 1812,
+  "channel": "test",
+  "pipeline": {
+    "status": "done",
+    "finished_at": "18:52",
+    "error": null
+  },
+  "strategies": {
+    "short": {
+      "label": "短線",
+      "status": "active",
+      "holding": "1–5 個交易日",
+      "note": null,
+      "picks": [
+        {
+          "code": "2330",
+          "name": "台積電",
+          "close": 1085,
+          "change_pct": 2.36,
+          "reason": "量增突破 20 日高點",
+          "tags": [
+            "外資連 3 買"
+          ]
+        },
+        {
+          "code": "3231",
+          "name": "緯創",
+          "close": 118.5,
+          "change_pct": 4.87,
+          "reason": "突破季線，成交量為 5 日均量 2.1 倍",
+          "tags": [
+            "投信買超"
+          ]
+        },
+        {
+          "code": "2382",
+          "name": "廣達",
+          "close": 302.0,
+          "change_pct": 1.85,
+          "reason": "站回 10 日線，MACD 翻正",
+          "tags": [
+            "外資買超"
+          ]
+        },
+        {
+          "code": "6669",
+          "name": "緯穎",
+          "close": 2410,
+          "change_pct": 3.21,
+          "reason": "多頭排列，回測 5 日線不破",
+          "tags": [
+            "投信連 2 買"
+          ]
+        },
+        {
+          "code": "3017",
+          "name": "奇鋐",
+          "close": 865,
+          "change_pct": -0.57,
+          "reason": "高檔量縮整理，留意隔日方向",
+          "tags": [
+            "外資小賣"
+          ]
+        }
+      ]
+    },
+    "swing": {
+      "label": "波段",
+      "status": "active",
+      "holding": "2–8 週",
+      "note": null,
+      "picks": [
+        {
+          "code": "2308",
+          "name": "台達電",
+          "close": 412.5,
+          "change_pct": 1.1,
+          "reason": "週線三連紅，季線上彎",
+          "tags": [
+            "外資連 5 買"
+          ]
+        },
+        {
+          "code": "2454",
+          "name": "聯發科",
+          "close": 1360,
+          "change_pct": 0.74,
+          "reason": "月線支撐有守，法人籌碼集中",
+          "tags": [
+            "投信買超"
+          ]
+        },
+        {
+          "code": "2603",
+          "name": "長榮",
+          "close": 196.0,
+          "change_pct": -1.26,
+          "reason": "區間下緣，等待止跌訊號",
+          "tags": [
+            "外資回補"
+          ]
+        }
+      ]
+    },
+    "long": {
+      "label": "中長線",
+      "status": "paused",
+      "holding": null,
+      "note": "依你的設定，中長線先不推播",
+      "picks": []
+    }
+  },
+  "market": {
+    "taiex": {
+      "close": 23418.62,
+      "change": 186.4,
+      "change_pct": 0.8,
+      "history": [
+        {
+          "date": "2026-10-01",
+          "close": 22710
+        },
+        {
+          "date": "2026-10-02",
+          "close": 22790
+        },
+        {
+          "date": "2026-10-05",
+          "close": 22650
+        },
+        {
+          "date": "2026-10-06",
+          "close": 22840
+        },
+        {
+          "date": "2026-10-07",
+          "close": 22930
+        },
+        {
+          "date": "2026-10-08",
+          "close": 22880
+        },
+        {
+          "date": "2026-10-09",
+          "close": 23010
+        },
+        {
+          "date": "2026-10-12",
+          "close": 22960
+        },
+        {
+          "date": "2026-10-13",
+          "close": 23105
+        },
+        {
+          "date": "2026-10-14",
+          "close": 23050
+        },
+        {
+          "date": "2026-10-15",
+          "close": 23180
+        },
+        {
+          "date": "2026-10-16",
+          "close": 23120
+        },
+        {
+          "date": "2026-10-19",
+          "close": 23240
+        },
+        {
+          "date": "2026-10-20",
+          "close": 23190
+        },
+        {
+          "date": "2026-10-21",
+          "close": 23060
+        },
+        {
+          "date": "2026-10-22",
+          "close": 23150
+        },
+        {
+          "date": "2026-10-23",
+          "close": 23210
+        },
+        {
+          "date": "2026-10-26",
+          "close": 23280
+        },
+        {
+          "date": "2026-10-27",
+          "close": 23232
+        },
+        {
+          "date": "2026-10-28",
+          "close": 23418.62
+        }
+      ]
+    },
+    "otc": {
+      "close": 261.07,
+      "change": -1.35,
+      "change_pct": -0.51,
+      "history": []
+    },
+    "institutional": {
+      "foreign": 128.4,
+      "trust": 36.2,
+      "dealer": -21.7
+    }
+  },
+  "validation": {
+    "status": "pending",
+    "note": "回測尚未完成",
+    "rules": [
+      "三段期間都要贏過大盤",
+      "扣除手續費與證交稅後仍為正報酬",
+      "每段至少 30 筆完整結果"
+    ],
+    "strategies": {
+      "short": {
+        "label": "短線",
+        "status": "pending",
+        "periods": [
+          {
+            "label": "2023 H2–2024",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          },
+          {
+            "label": "2025",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          },
+          {
+            "label": "2026",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          }
+        ]
+      },
+      "swing": {
+        "label": "波段",
+        "status": "pending",
+        "periods": [
+          {
+            "label": "2023 H2–2024",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          },
+          {
+            "label": "2025",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          },
+          {
+            "label": "2026",
+            "excess_return_pct": null,
+            "net_return_pct": null,
+            "samples": null,
+            "passed": null
+          }
+        ]
+      }
+    }
+  },
+  "schedule": [
+    {
+      "time": "08:07",
+      "name": "盤前訊息",
+      "detail": "備援 08:29 自動補發",
+      "status": "sent"
+    },
+    {
+      "time": "13:30",
+      "name": "收盤",
+      "detail": "等待官方資料公布",
+      "status": "done"
+    },
+    {
+      "time": "18:45",
+      "name": "收盤後流程",
+      "detail": "抓行情、法人、指數 → 選股 → 推播",
+      "status": "done"
+    },
+    {
+      "time": "明日",
+      "name": "盤前訊息",
+      "detail": "10/29 08:07",
+      "status": "scheduled"
+    }
+  ],
+  "backfill": [
+    {
+      "name": "行情",
+      "status": "done",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": "2023-01 → 2026-10",
+      "note": null
+    },
+    {
+      "name": "法人買賣超",
+      "status": "running",
+      "done": 16,
+      "total": 90,
+      "unit": "批",
+      "range": null,
+      "note": "資料已到 2023-08"
+    },
+    {
+      "name": "指數",
+      "status": "pending",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": null,
+      "note": null
+    },
+    {
+      "name": "回測",
+      "status": "pending",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": null,
+      "note": "三段期間：2023 H2–2024、2025、2026"
+    }
+  ]
+}

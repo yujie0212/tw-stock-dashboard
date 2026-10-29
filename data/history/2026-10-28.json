@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-29T08:50:26+08:00",
+  "generated_at": "2026-10-29T12:06:14+08:00",
   "trade_date": "2026-10-28",
   "universe_count": 1984,
   "channel": "test",
   "pipeline": {
-    "status": "done",
-    "finished_at": "08:50",
-    "error": null
+    "status": "failed",
+    "finished_at": null,
+    "error": "即時市場狀態只可在當日台北 18:00 後取得；不能重建歷史"
   },
   "strategies": {
     "short": {
@@ -388,12 +388,18 @@
       "time": "08:07",
       "name": "盤前訊息",
       "detail": "備援 08:29",
-      "status": "sent"
+      "status": "done"
     },
     {
       "time": "18:45",
       "name": "收盤後流程",
       "detail": "抓行情、法人、指數 → 選股 → 推播",
+      "status": "failed"
+    },
+    {
+      "time": "明日",
+      "name": "盤前訊息",
+      "detail": "08:07，備援 08:29",
       "status": "scheduled"
     }
   ],

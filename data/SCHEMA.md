@@ -54,6 +54,8 @@
 | `change_pct` | 漲跌幅（%），例如 `2.36` |
 | `reason` | 選入原因，一句話 |
 | `tags` | 字串陣列，例如法人動向 `["外資連 3 買"]` |
+| `big_holder_pct` | 千張大戶持股比例（%），沒有資料為 `null` |
+| `big_holder_week_change` | 與上一週的差（百分點），沒有上一週資料為 `null` |
 
 ## `market`
 
@@ -61,6 +63,11 @@
 |---|---|
 | `taiex`、`otc` | 加權指數、櫃買指數：`close`、`change`（點數）、`change_pct`（%）、`history`（近 20 個交易日 `[{date, close}]`，由舊到新） |
 | `institutional` | 三大法人買賣超，單位**億元**：`foreign`、`trust`、`dealer`，賣超為負數 |
+| `margin` | 融資餘額（只供顯示）：`date`（資料日）、`balance_100m`（上市＋上櫃合計，億元）、`change_100m`（較前日，億元）；沒有資料為 `null` |
+| `fx` | 美元兌台幣（只供顯示）：`date`、`usd_twd`（期交所參考匯率，數字或字串）、`usd_twd_change_pct`（%，**正數代表台幣貶值**）；沒有資料為 `null` |
+| `big_holder_week` | 集保股權分散表的資料週 `YYYY-MM-DD`，網頁顯示在大戶欄標題 |
+
+三大法人三個值都是 `null` 時，網頁會隱藏法人區塊。
 
 ## `validation`
 

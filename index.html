@@ -157,6 +157,15 @@ th.r, td.r { text-align: right; }
 .flow .bar { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
 .flow .bar-track::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--line); }
 .flow .amt { text-align: right; }
+.funds { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 12px; }
+.fund { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; align-items: baseline; }
+.fund .name { font-size: 13px; }
+.fund .val { font-family: var(--font-num); font-variant-numeric: tabular-nums; font-size: 15px; font-weight: 600; text-align: right; }
+.fund .sub { font-size: 11.5px; color: var(--muted); }
+.fund .chg { font-family: var(--font-num); font-size: 12.5px; text-align: right; }
+.holder { white-space: nowrap; }
+.holder .wk { display: block; font-size: 11.5px; }
+th .sub { display: block; font-size: 11px; font-weight: 400; }
 
 /* Gate */
 .gate { padding: 0 16px 16px; display: grid; gap: 12px; }
@@ -325,6 +334,7 @@ function renderHeader(d) {
 }
 
 let STRATS = {};
+let BIG_WEEK = null;
 function renderPicks(k) {
   const s = STRATS[k];
   document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.k === k ? 'true' : 'false'));
@@ -332,11 +342,12 @@ function renderPicks(k) {
   const rows = s.picks || [];
   if (s.status === 'paused') { $('picks').innerHTML = empty(`${s.label}策略暫停中`, '恢復後，選股結果會顯示在這裡。'); return; }
   if (!rows.length) { $('picks').innerHTML = empty('今日沒有符合條件的股票', '策略條件都沒有股票達到，明天收盤後再更新。'); return; }
-  $('picks').innerHTML = '<div class="table-wrap"><table><thead><tr><th>股票</th><th class="r">收盤</th><th class="r">漲跌</th><th>選入原因</th></tr></thead><tbody>' +
+  $('picks').innerHTML = `<div class="table-wrap"><table><thead><tr><th>股票</th><th class="r">收盤</th><th class="r">漲跌</th><th class="r">千張大戶${BIG_WEEK ? `<span class="sub">${esc(BIG_WEEK.slice(5).replace('-', '/'))} 週</span>` : ''}</th><th>選入原因</th></tr></thead><tbody>` +
     rows.map(r => `<tr>
       <td><div class="stock"><span class="name">${esc(r.name)}</span><span class="code">${esc(r.code)}</span></div></td>
       <td class="r num">${fmt(r.close)}</td>
       <td class="r num ${dir(r.change_pct)}">${has(r.change_pct) ? signed(r.change_pct) + '%' : '—'}</td>
+      <td class="r num holder">${has(r.big_holder_pct) ? fmt(r.big_holder_pct, 2) + '%' : '—'}${has(r.big_holder_week_change) ? `<span class="wk ${dir(r.big_holder_week_change)}">${signed(r.big_holder_week_change)}</span>` : ''}</td>
       <td class="reason">${esc(r.reason)}<div class="tags">${(r.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div></td>
     </tr>`).join('') + '</tbody></table></div>';
 }
@@ -381,8 +392,8 @@ function renderMarket(d) {
       ${spark(x.history)}</div>` : '';
   const inst = m.institutional;
   let flows = '';
-  if (inst) {
-    const items = [['外資', inst.foreign], ['投信', inst.trust], ['自營商', inst.dealer]].filter(([, v]) => has(v));
+  const items = inst ? [['外資', inst.foreign], ['投信', inst.trust], ['自營商', inst.dealer]].filter(([, v]) => has(v)) : [];
+  if (items.length) {
     const peak = Math.max(...items.map(([, v]) => Math.abs(v)), 1);
     flows = `<div class="flows" aria-label="三大法人買賣超"><span class="label">三大法人買賣超（億元）</span>` +
       items.map(([n, v]) => {
@@ -391,7 +402,33 @@ function renderMarket(d) {
         return `<div class="flow"><span>${n}</span><div class="bar-track"><div class="bar" style="${side}"></div></div><span class="amt num ${dir(v)}">${signed(v, 1)}</span></div>`;
       }).join('') + '</div>';
   }
-  $('market').innerHTML = idx('加權指數', m.taiex) + idx('櫃買指數', m.otc) + flows;
+  $('market').innerHTML = idx('加權指數', m.taiex) + idx('櫃買指數', m.otc) + flows + funds(m);
+}
+
+const mmdd = (date) => date ? `${date.slice(5).replace('-', '/')} 資料` : '';
+function funds(m) {
+  const rows = [];
+  const mg = m.margin;
+  if (mg) {
+    const c = mg.change_100m;
+    rows.push(`<div class="fund">
+      <span class="name">融資餘額</span><span class="val">${has(mg.balance_100m) ? fmt(mg.balance_100m, 1) + ' 億' : '—'}</span>
+      <span class="sub">上市＋上櫃 · ${esc(mmdd(mg.date))}</span><span class="chg ${dir(c)}">${has(c) ? (c > 0 ? '增 ' : c < 0 ? '減 ' : '') + fmt(Math.abs(c), 1) + ' 億' : '—'}</span></div>`);
+  } else if ('margin' in m) {
+    rows.push(`<div class="fund"><span class="name">融資餘額</span><span class="val">—</span><span class="sub">尚未公布</span><span></span></div>`);
+  }
+  const fx = m.fx;
+  if (fx) {
+    const p = fx.usd_twd_change_pct;
+    // Positive = more TWD per USD = TWD weakened.
+    const move = !has(p) ? '—' : p > 0 ? `台幣貶值 ${fmt(p, 2)}%` : p < 0 ? `台幣升值 ${fmt(-p, 2)}%` : '台幣持平';
+    rows.push(`<div class="fund">
+      <span class="name">美元／台幣</span><span class="val">${has(fx.usd_twd) ? fmt(Number(fx.usd_twd), 3) : '—'}</span>
+      <span class="sub">期交所參考匯率 · ${esc(mmdd(fx.date))}</span><span class="chg ${has(p) ? dir(-p) : ''}">${move}</span></div>`);
+  } else if ('fx' in m) {
+    rows.push(`<div class="fund"><span class="name">美元／台幣</span><span class="val">—</span><span class="sub">尚未公布</span><span></span></div>`);
+  }
+  return rows.length ? `<div class="funds" aria-label="市場資金"><span class="label">市場資金</span>${rows.join('')}</div>` : '';
 }
 
 function renderGate(d) {
@@ -444,6 +481,7 @@ function renderBackfill(d) {
 function render(d) {
   if (DEMO) showNotice('示範資料：這些股票、價格與數字都是範例，不是系統實際輸出。<a href="#" id="exit-demo">看實際資料</a>', 'warn');
   if (d.generated_at) $('footer').textContent = `資料產生時間 ${d.generated_at.replace('T', ' ').slice(0, 16)}　·　` + $('footer').textContent;
+  BIG_WEEK = (d.market || {}).big_holder_week || null;
   renderHeader(d); renderStrategies(d); renderMarket(d); renderGate(d); renderSchedule(d); renderBackfill(d);
 }
 

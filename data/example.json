@@ -24,7 +24,9 @@
           "reason": "量增突破 20 日高點",
           "tags": [
             "外資連 3 買"
-          ]
+          ],
+          "big_holder_pct": 78.42,
+          "big_holder_week_change": 0.31
         },
         {
           "code": "3231",
@@ -34,7 +36,9 @@
           "reason": "突破季線，成交量為 5 日均量 2.1 倍",
           "tags": [
             "投信買超"
-          ]
+          ],
+          "big_holder_pct": 41.07,
+          "big_holder_week_change": -0.52
         },
         {
           "code": "2382",
@@ -44,7 +48,9 @@
           "reason": "站回 10 日線，MACD 翻正",
           "tags": [
             "外資買超"
-          ]
+          ],
+          "big_holder_pct": 55.9,
+          "big_holder_week_change": 1.12
         },
         {
           "code": "6669",
@@ -54,7 +60,9 @@
           "reason": "多頭排列，回測 5 日線不破",
           "tags": [
             "投信連 2 買"
-          ]
+          ],
+          "big_holder_pct": 63.18,
+          "big_holder_week_change": null
         },
         {
           "code": "3017",
@@ -64,7 +72,9 @@
           "reason": "高檔量縮整理，留意隔日方向",
           "tags": [
             "外資小賣"
-          ]
+          ],
+          "big_holder_pct": 48.6,
+          "big_holder_week_change": 0.05
         }
       ]
     },
@@ -82,7 +92,9 @@
           "reason": "週線三連紅，季線上彎",
           "tags": [
             "外資連 5 買"
-          ]
+          ],
+          "big_holder_pct": 70.25,
+          "big_holder_week_change": 0.4
         },
         {
           "code": "2454",
@@ -92,7 +104,9 @@
           "reason": "月線支撐有守，法人籌碼集中",
           "tags": [
             "投信買超"
-          ]
+          ],
+          "big_holder_pct": 81.3,
+          "big_holder_week_change": -0.18
         },
         {
           "code": "2603",
@@ -102,7 +116,9 @@
           "reason": "區間下緣，等待止跌訊號",
           "tags": [
             "外資回補"
-          ]
+          ],
+          "big_holder_pct": 44.11,
+          "big_holder_week_change": 0.27
         }
       ]
     },
@@ -209,10 +225,21 @@
       "history": []
     },
     "institutional": {
-      "foreign": 128.4,
-      "trust": 36.2,
-      "dealer": -21.7
-    }
+      "foreign": null,
+      "trust": null,
+      "dealer": null
+    },
+    "margin": {
+      "date": "2026-10-27",
+      "balance_100m": 3412.6,
+      "change_100m": 18.4
+    },
+    "fx": {
+      "date": "2026-10-28",
+      "usd_twd": "30.412",
+      "usd_twd_change_pct": -0.21
+    },
+    "big_holder_week": "2026-10-23"
   },
   "validation": {
     "status": "pending",

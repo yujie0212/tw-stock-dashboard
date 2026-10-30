@@ -696,7 +696,8 @@ body.locked { overflow: hidden; }
 .pf-cell + .pf-cell { border-left: 1px solid color-mix(in srgb, var(--mag) 40%, transparent); }
 .pf-cell .k { font-family: var(--font-num); font-size: 11.5px; letter-spacing: .14em; color: var(--muted); }
 .pf-cell .v { font-family: var(--font-hud); font-size: clamp(18px, 2.4vw, 25px); font-weight: 700; white-space: nowrap; }
-.pf-cell .s { font-family: var(--font-num); font-size: 12.5px; white-space: nowrap; }
+.pf-cell .s { font-family: var(--font-num); font-size: 12px; white-space: normal; line-height: 1.4; }
+.pf-cell .k .app { font-size: 10.5px; letter-spacing: 0; color: var(--volt); border: 1px solid color-mix(in srgb, var(--volt) 45%, transparent); padding: 0 4px; margin-left: 4px; white-space: nowrap; }
 @media (max-width: 760px) {
   .pf-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pf-cell:nth-child(3) { border-left: 0; }
@@ -1800,13 +1801,35 @@ function pfMargin(ms, rep) {
   requestAnimationFrame(() => requestAnimationFrame(() => document.querySelectorAll('#pf-margin .arc').forEach(a => a.setAttribute('stroke-dashoffset', a.dataset.off))));
 }
 
+// Account totals follow the broker app: net value = market value − margin loan − estimated selling costs,
+// return = unrealized P&L ÷ own cost (cost minus the loan). Older files lack account_summary, so derive it.
+function pfAccount(sj) {
+  const a = sj.account_summary;
+  if (a && pfHas(a.net_value)) return a;
+  let gross = 0, grossCost = 0, loan = 0, sell = 0, pnl = 0, interest = 0;
+  const codes = new Set();
+  for (const p of sj.positions || []) {
+    const q = pfNum(p.quantity) || 0, last = pfNum(p.last_price) || 0, v = q * last;
+    gross += v; grossCost += q * (pfNum(p.price) || 0); loan += pfNum(p.margin_purchase_amount) || 0;
+    pnl += pfNum(p.pnl) || 0; interest += pfNum(p.interest) || 0; codes.add(String(p.code));
+    sell += v * ((/^00/.test(String(p.code)) ? 0.001 : 0.003) + 0.001425);  // ETF 0.1% / stock 0.3% tax + 0.1425% fee
+  }
+  const own = grossCost - loan;
+  return { gross_market_value: gross, margin_loan: loan, est_sell_cost: sell, net_value: gross - loan - sell, gross_cost: grossCost,
+    own_cost: own, unrealized_pnl: pnl, return_on_own_pct: own ? pnl / own * 100 : null, accrued_interest: interest, codes: codes.size, derived: true };
+}
+
 function pfStrip(sj, list) {
-  const value = list.reduce((t, h) => t + h.value, 0), cost = list.reduce((t, h) => t + h.cost, 0), pnl = list.reduce((t, h) => t + h.pnl, 0);
+  const a = pfAccount(sj);
+  const ret = pfNum(a.return_on_own_pct), pnl = pfNum(a.unrealized_pnl);
   const net = (sj.settlements || []).filter(s => pfNum(s.T) > 0).reduce((t, s) => t + (pfNum(s.amount) || 0), 0);
+  const app = '<small class="app">以券商 App 為準</small>';
   $('pf-strip').innerHTML = `
-    <div class="pf-cell"><span class="k">持股市值</span><span class="v num">${pfMoney(value)}</span><span class="s pf-muted">${list.length} 檔</span></div>
-    <div class="pf-cell"><span class="k">未實現損益</span><span class="v num ${pfDir(pnl)}">${pfSMoney(pnl)}</span><span class="s ${pfDir(pnl)}">${cost ? pfSigned(pnl / cost * 100) + '%' : '—'}</span></div>
-    <div class="pf-cell"><span class="k">交割帳戶餘額</span><span class="v num">${pfMoney((sj.account_balance || {}).acc_balance)}</span><span class="s pf-muted">可用餘額</span></div>
+    <div class="pf-cell"><span class="k">淨值 ${app}</span><span class="v num">${pfMoney(a.net_value)}</span>
+      <span class="s pf-muted">總市值 ${pfMoney(a.gross_market_value)}（含融資 ${pfMoney(a.margin_loan)}）</span></div>
+    <div class="pf-cell"><span class="k">報酬率 ${app}</span><span class="v num ${pfDir(ret)}">${pfHas(ret) ? pfSigned(ret) + '%' : '—'}</span>
+      <span class="s"><span class="${pfDir(pnl)}">${pfSMoney(pnl)}</span> <span class="pf-muted">· 自備成本 ${pfMoney(a.own_cost)}</span></span></div>
+    <div class="pf-cell"><span class="k">交割帳戶餘額</span><span class="v num">${pfMoney((sj.account_balance || {}).acc_balance)}</span><span class="s pf-muted">可用餘額 · ${pfHas(a.codes) ? pfFmt(a.codes, 0) : list.length} 檔持股</span></div>
     <div class="pf-cell"><span class="k">未來交割款</span><span class="v num ${pfDir(net)}">${pfSMoney(net)}</span><span class="s pf-muted">T+1、T+2 合計</span></div>`;
 }
 

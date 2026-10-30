@@ -144,3 +144,4 @@
 - `data/portfolio/YYYY-MM-DD.json`：`{v, iv, ct}`，AES-256-GCM 密文（`ct` 含驗證標籤，base64）。解密後為 `{date, sj, report}`：`sj` 是當天的 `sj_YYYYMMDD.json`（已移除 `diag`），`report` 是當天健診報告的 Markdown 原文；沒有的一方為 `null`。
 - `data/portfolio-example/`：範例資料（`#demo-pf`，密碼 `demo1234`），不要讓系統覆寫。
 - 原始檔的欄位說明見使用者的「每日持股資料：檔案規格說明」。
+- 帳戶總覽用 `sj.account_summary`（規格第 3.6 節）：大字顯示淨值 `net_value`，報酬率用 `return_on_own_pct`（分母是自備成本），總市值與融資金額用小字註明。舊檔沒有 `account_summary` 時，網頁照第 3.6 節的公式從 `positions` 自行計算。數字旁標示「以券商 App 為準」。

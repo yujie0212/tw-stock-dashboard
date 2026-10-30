@@ -135,3 +135,12 @@
 - 指數日 K 只有開高低收，沒有 `turnover`；網頁會隱藏成交金額與下方的量柱。
 - `TAIEX.json` 有 `intraday_5m`（只有開高低收）；`OTC.json` 沒有，櫃買指數的分 K 按鈕會停用。
 - 個股沒有 `intraday_5m`（分 K 需付費來源），個股的分 K 按鈕會停用。
+
+# 我的持股（加密，schema v1）
+
+「我的持股」分頁的資料由使用者電腦上的 `tools/portfolio_upload.py` 加密後上傳。網站只存放密文，瀏覽器輸入密碼後才在本機解密。
+
+- `data/portfolio/index.json`：`{v, kdf: {name, salt, iter}, check: {iv, ct}, days: ["YYYY-MM-DD", ...]}`。`kdf` 為 PBKDF2-SHA256，`check` 用來確認密碼是否正確。
+- `data/portfolio/YYYY-MM-DD.json`：`{v, iv, ct}`，AES-256-GCM 密文（`ct` 含驗證標籤，base64）。解密後為 `{date, sj, report}`：`sj` 是當天的 `sj_YYYYMMDD.json`（已移除 `diag`），`report` 是當天健診報告的 Markdown 原文；沒有的一方為 `null`。
+- `data/portfolio-example/`：範例資料（`#demo-pf`，密碼 `demo1234`），不要讓系統覆寫。
+- 原始檔的欄位說明見使用者的「每日持股資料：檔案規格說明」。

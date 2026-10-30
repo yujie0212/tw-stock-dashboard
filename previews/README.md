@@ -21,5 +21,6 @@
 | `backup/style-v3-board` | 活潑版 v3（報價看板、選股卡片） |
 | `backup/style-v4-cyberpunk` | 賽博龐克版 |
 | `backup/style-v5-kline` | 賽博龐克版＋個股／指數 K 線詳情 |
+| `backup/before-portfolio` | 加上「我的持股」分頁之前 |
 
 還原方式：`git checkout origin/<分支> -- index.html`，再 commit 推上去；或直接跟 Claude 說「還原到 v3」。

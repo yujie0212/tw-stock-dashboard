@@ -1,0 +1,16 @@
+{
+ "v": 1,
+ "kdf": {
+  "name": "PBKDF2-SHA256",
+  "salt": "EjpXNQvkv4IJBcBY3jAQNg==",
+  "iter": 600000
+ },
+ "check": {
+  "iv": "uRWqF/A7bhyBmOFX",
+  "ct": "TtFVMIOHZmN6/8162yYr0MBrW9nWmuraRgTyeLM3"
+ },
+ "days": [
+  "2026-10-30",
+  "2026-11-02"
+ ]
+}

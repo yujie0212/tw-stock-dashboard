@@ -1,0 +1,15 @@
+{
+ "v": 1,
+ "kdf": {
+  "name": "PBKDF2-SHA256",
+  "salt": "5tCeWwJ/+duczltExOrQRA==",
+  "iter": 600000
+ },
+ "check": {
+  "iv": "s6C/j3UydywdEKwM",
+  "ct": "QPFNHDePCUlTWGwrNIcxYReZMlJB4Z2RWBQZxoIk"
+ },
+ "days": [
+  "2026-10-30"
+ ]
+}

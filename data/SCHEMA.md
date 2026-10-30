@@ -106,3 +106,26 @@
 | `done`、`total`、`unit` | 進度，例如 `16`、`90`、`批`；沒有可計數的進度時填 `null` |
 | `range` | 完成時顯示的資料範圍，例如 `2023-01 → 2026-10` |
 | `note` | 補充說明 |
+
+# 個股與指數資料檔（schema_version 1）
+
+點選股卡片或加權、櫃買指數時，網頁讀取下列檔案畫 K 線與基本資料。檔案不存在時，個股會顯示「還沒有個股資料檔」，指數會改用 `latest.json` 裡近 20 日收盤價畫走勢線。
+
+- `data/stocks/<代號>.json`：每檔**當天入選**的股票一份。
+- `data/indices/TAIEX.json`、`data/indices/OTC.json`：加權指數、櫃買指數。
+- `data/example-stocks/`、`data/example-indices/`：範例資料（`#demo` 用），不要讓系統覆寫。
+
+範例見 `data/example-stocks/2330.json`、`data/example-indices/TAIEX.json`。沒有的資料填 `null` 或省略，不要填估計值。
+
+| 欄位 | 說明 |
+|---|---|
+| `schema_version` | 固定 `1` |
+| `code` | 股票代號（字串）；指數為 `TAIEX` 或 `OTC` |
+| `name` | 名稱 |
+| `trade_date` | 最後一根日 K 的日期 `YYYY-MM-DD` |
+| `market` | 個股：`上市` 或 `上櫃` |
+| `industry` | 個股：產業別，例如 `半導體業` |
+| `listed_on` | 個股：上市（櫃）日期 `YYYY-MM-DD` |
+| `candles` | 日 K，由舊到新，建議至少 500 個交易日（週 K、月 K 由網頁從日 K 合併）：`[{date, open, high, low, close, volume, turnover}]`。原始價（未還原）。`volume` 單位**股**（網頁 ÷1000 顯示張數），`turnover` 單位**元**。指數沒有 `volume`，只給 `turnover` |
+| `intraday_5m` | 最近 5 個交易日的 5 分 K，由舊到新：`[{t, open, high, low, close, volume, turnover}]`，`t` 為**台灣時間**該根的開始時間 `YYYY-MM-DDTHH:MM`（09:00～13:25）。15 分、60 分 K 由網頁合併。沒有分鐘資料時省略或給空陣列，網頁會停用分 K 按鈕 |
+| `fundamentals` | 個股：`{date, pe, pb, dividend_yield}`，本益比、股價淨值比、殖利率（%），`date` 為資料日 |

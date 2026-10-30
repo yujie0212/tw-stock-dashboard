@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#07060d">
 <style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>台股選股監控台</title>
+<script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Share+Tech+Mono&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap">
 <style>
@@ -300,14 +301,6 @@ body::after {
 .topbar { background: color-mix(in srgb, var(--surface) 82%, transparent); backdrop-filter: blur(10px); }
 .pill.ok::before { box-shadow: 0 0 0 0 currentColor; }
 
-/* 跑馬燈 */
-.tape { border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 70%, transparent); overflow: hidden; }
-.tape-track { display: flex; width: max-content; gap: 0; padding-block: 7px; }
-.tape-item { display: inline-flex; align-items: baseline; gap: 6px; padding: 0 18px; font-size: 13px; white-space: nowrap; border-right: 1px solid var(--line); }
-.tape-item b { font-weight: 500; }
-.tape-item .code { color: var(--muted); font-family: var(--font-num); font-size: 11.5px; }
-.tape-item .num { font-size: 12.5px; }
-.tape-item .s { width: 6px; height: 6px; border-radius: 50%; align-self: center; }
 
 /* 今日盤勢 */
 .mood { display: grid; grid-template-columns: auto 1fr; gap: 6px 22px; align-items: center; padding-block: 18px 16px; }
@@ -373,9 +366,6 @@ body::after {
 .countdown { font-size: 12px; color: var(--accent); font-family: var(--font-num); display: block; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .tape-track { animation: tape 48s linear infinite; }
-  .tape:hover .tape-track { animation-play-state: paused; }
-  @keyframes tape { to { transform: translateX(-50%); } }
   .pill.ok::before, .timeline li.next::before { animation: ping 1.8s ease-out infinite; }
   @keyframes ping { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 60%, transparent); } 100% { box-shadow: 0 0 0 7px transparent; } }
   .timeline li.next::before { color: var(--accent); }
@@ -387,7 +377,6 @@ body::after {
   .ring .spin { animation: spin 9s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 }
-@media (prefers-reduced-motion: reduce) { .tape { overflow-x: auto; } }
 
 /* 報價看板：和下方選股卡片刻意不同 —— 一整條連續看板、細分隔線、實心漲跌標籤、無光暈 */
 .tickers {
@@ -479,12 +468,6 @@ main::before {
 .pill.ok { background: color-mix(in srgb, var(--down) 18%, transparent); }
 .pill.warn { background: color-mix(in srgb, var(--volt) 18%, transparent); }
 
-/* tape */
-.tape { border-block: 1px solid var(--volt); background: var(--volt); }
-.tape-item { color: #07060d; border-right-color: rgba(0,0,0,.25); font-family: var(--font-num); }
-.tape-item .code, .tape-item .num { color: #07060d; }
-.tape-item .num.up { color: #b0002e; } .tape-item .num.down { color: #00663f; }
-.tape-item .s { box-shadow: 0 0 0 1px #07060d; }
 
 /* notice */
 .notice { border-radius: 0; border-left: 3px solid var(--volt); font-family: var(--font-num); }
@@ -551,6 +534,7 @@ main::before {
 /* chart */
 .seg { border-radius: 0; background: #07060d; border: 1px solid var(--line); }
 .seg button { border-radius: 0; font-family: var(--font-num); letter-spacing: .08em; }
+.seg button:disabled { opacity: .35; cursor: not-allowed; }
 .seg button[aria-pressed="true"] { background: var(--accent); color: #07060d; box-shadow: 0 0 12px -2px var(--accent); }
 .chart-head .last { font-family: var(--font-hud); }
 .chart svg polyline { filter: drop-shadow(0 0 4px currentColor); }
@@ -588,6 +572,79 @@ footer { font-family: var(--font-num); letter-spacing: .04em; }
   .panel::before { animation: sweep 3.5s ease-in-out infinite alternate; }
   @keyframes sweep { to { left: calc(100% - 64px); } }
 }
+
+/* ================= 個股詳情 ================= */
+a.pick { color: inherit; text-decoration: none; cursor: pointer; }
+a.pick:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pick .go { font-family: var(--font-num); font-size: 11px; color: var(--accent); letter-spacing: .08em; opacity: .75; }
+a.pick:hover .go { opacity: 1; text-shadow: 0 0 8px var(--accent); }
+
+.sheet-back {
+  position: fixed; inset: 0; z-index: 40; background: rgba(3,2,8,.72); backdrop-filter: blur(4px);
+  display: flex; align-items: flex-start; justify-content: center; overflow-y: auto;
+  padding: max(24px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(24px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+}
+.sheet {
+  width: min(980px, 100%); background: var(--surface); border: 1px solid var(--accent);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 0 40px -8px var(--accent);
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+  display: grid; gap: 0; min-width: 0;
+}
+.sheet-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 16px 18px 12px; border-bottom: 1px solid var(--line); }
+.sheet-head .who { display: flex; align-items: baseline; gap: 10px; margin-right: auto; min-width: 0; flex-wrap: wrap; }
+.sheet-head h3 { margin: 0; font-size: 24px; font-weight: 900; font-family: "Noto Sans TC", sans-serif; }
+.sheet-head .code { font-family: var(--font-num); color: var(--muted); font-size: 15px; }
+.sheet-head .mkt { font-family: var(--font-num); font-size: 11.5px; color: var(--accent); border: 1px solid var(--accent); padding: 0 6px; }
+.sheet-head .quote { display: flex; align-items: baseline; gap: 10px; }
+.sheet-head .quote .p { font-family: var(--font-hud); font-size: 26px; font-weight: 700; }
+.sheet-head .quote .c { font-family: var(--font-num); font-size: 14px; }
+@media (max-width: 560px) {
+  .sheet-head .who { order: 1; }
+  .sheet-x { order: 2; }
+  .sheet-head .quote { order: 3; flex-basis: 100%; }
+}
+.sheet-x {
+  font: inherit; font-family: var(--font-num); background: none; border: 1px solid var(--line); color: var(--fg);
+  width: 36px; height: 36px; cursor: pointer; font-size: 18px; line-height: 1;
+}
+.sheet-x:hover, .sheet-x:focus-visible { border-color: var(--mag); color: var(--mag); outline: none; box-shadow: 0 0 10px -2px var(--mag); }
+.sheet-body { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 0; }
+@media (max-width: 820px) { .sheet-body { grid-template-columns: minmax(0, 1fr); } }
+.kwrap { padding: 12px 14px 14px; border-right: 1px solid var(--line); min-width: 0; display: grid; gap: 8px; align-content: start; }
+@media (max-width: 820px) { .kwrap { border-right: 0; border-bottom: 1px solid var(--line); } }
+.ktools { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.legend { display: flex; gap: 12px; font-family: var(--font-num); font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.legend i { display: inline-block; width: 10px; height: 2px; vertical-align: 3px; margin-right: 4px; }
+.kchart { height: 360px; width: 100%; position: relative; }
+@media (max-width: 520px) { .kchart { height: 280px; } }
+.kinfo { font-family: var(--font-num); font-size: 12px; color: var(--muted); min-height: 18px; }
+.kinfo b { color: var(--fg); font-weight: 400; margin-right: 10px; }
+.facts { padding: 12px 16px 16px; display: grid; gap: 14px; align-content: start; }
+.facts h4 { margin: 0 0 6px; font-family: var(--font-hud); font-size: 12px; letter-spacing: .14em; color: var(--accent); }
+.facts h4::before { content: "// "; color: var(--mag); }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; margin: 0; font-size: 13.5px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; text-align: right; font-family: var(--font-num); }
+.kv dd small { color: var(--muted); font-size: 11px; margin-left: 4px; }
+.why-box { font-size: 13.5px; line-height: 1.5; border-left: 2px solid var(--s, var(--volt)); padding-left: 10px; }
+.links { display: flex; gap: 8px; flex-wrap: wrap; }
+.links a {
+  font-family: var(--font-num); font-size: 12px; color: var(--accent); text-decoration: none;
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); padding: 4px 10px;
+}
+.links a:hover, .links a:focus-visible { background: var(--accent); color: #07060d; outline: none; }
+.na { color: var(--muted); }
+a.tick { color: inherit; text-decoration: none; cursor: pointer; }
+a.tick .go { color: var(--accent); opacity: .7; letter-spacing: .06em; }
+a.tick:hover { background: color-mix(in srgb, var(--tone) 10%, transparent); }
+a.tick:hover .go { opacity: 1; text-shadow: 0 0 8px var(--accent); }
+a.tick:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.partial-note { font-size: 12px; color: var(--muted); border-left: 2px solid var(--volt); padding-left: 8px; }
+@media (prefers-reduced-motion: no-preference) {
+  .sheet { animation: sheet-in .28s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes sheet-in { from { opacity: 0; transform: translateY(14px) scale(.985); } }
+}
+body.locked { overflow: hidden; }
 </style>
 </head>
 <body>
@@ -603,7 +660,6 @@ footer { font-family: var(--font-num); letter-spacing: .04em; }
     <span class="pill idle" id="channel-pill" hidden></span>
   </div>
 </header>
-<div class="tape" id="tape" aria-label="今日選股與指數跑馬燈"><div class="tape-track" id="tape-track"></div></div>
 
 <main>
   <section class="wrap" aria-label="今日摘要">
@@ -666,7 +722,8 @@ footer { font-family: var(--font-num); letter-spacing: .04em; }
 </main>
 
 <script>
-const DEMO = location.hash === '#demo';
+const DEMO = location.hash.startsWith('#demo');
+const HASH_PRE = DEMO ? '#demo-s-' : '#s-';
 const SRC = DEMO ? 'data/example.json' : 'data/latest.json';
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -776,7 +833,7 @@ function spark(history) {
 function renderTickers(d) {
   const m = d.market || {};
   const cards = [];
-  const idx = (name, x) => {
+  const idx = (name, x, code) => {
     if (!x || !has(x.close)) return;
     const t = dir(x.change_pct) || 'flat';
     const hv = (x.history || []).map(h => h.close).filter(has);
@@ -786,12 +843,12 @@ function renderTickers(d) {
       const pts = hv.map((v, i) => `${(i * 100 / (hv.length - 1)).toFixed(1)},${(17 - (v - lo) / sp * 16).toFixed(1)}`).join(' ');
       mini = `<svg class="mini" viewBox="0 0 100 18" preserveAspectRatio="none" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="var(--tone)" stroke-width="1.4" vector-effect="non-scaling-stroke"></polyline></svg>`;
     }
-    cards.push(`<div class="tick ${t}"><span class="k"><span>${name}</span></span>
+    cards.push(`<a class="tick ${t}" href="${HASH_PRE}${code}" aria-label="${name}，查看 K 線"><span class="k"><span>${name}</span><small class="go">K 線 ▸</small></span>
       <span class="v">${num(x.close, 2)}</span>${mini}
-      <span class="c">${x.change > 0 ? '▲' : x.change < 0 ? '▼' : ''} ${fmt(Math.abs(x.change ?? 0), 2)}　${signed(x.change_pct)}%</span></div>`);
+      <span class="c">${x.change > 0 ? '▲' : x.change < 0 ? '▼' : ''} ${fmt(Math.abs(x.change ?? 0), 2)}　${signed(x.change_pct)}%</span></a>`);
   };
-  idx('加權指數', m.taiex);
-  idx('櫃買指數', m.otc);
+  idx('加權指數', m.taiex, 'TAIEX');
+  idx('櫃買指數', m.otc, 'OTC');
   const mg = m.margin;
   if (mg && has(mg.balance_100m)) {
     const c = mg.change_100m, t = dir(c) || 'flat';
@@ -809,7 +866,7 @@ function renderTickers(d) {
       <span class="v">${num(Number(fx.usd_twd), 3)}</span>
       <span class="c">${move}</span></div>`);
   }
-  $('tickers').innerHTML = cards.map((c, i) => c.replace('<div class="tick ', `<div style="--i:${i}" class="rise tick `)).join('');
+  $('tickers').innerHTML = cards.map((c, i) => c.replace(/^<(div|a) class="tick /, (m0, tag) => `<${tag} style="--i:${i}" class="rise tick `)).join('');
   $('tickers').hidden = !cards.length;
   $('tickers').style.setProperty('--n', Math.max(cards.length, 1));
 }
@@ -928,19 +985,6 @@ function renderMood(d) {
   $('mood-kicker').textContent = has(p) ? `今日盤勢 · 加權 ${signed(p)}%` : '今日盤勢';
 }
 
-function renderTape(d) {
-  const items = [];
-  const m = d.market || {};
-  [['加權', m.taiex], ['櫃買', m.otc]].forEach(([n, x]) => {
-    if (x && has(x.close)) items.push(`<span class="tape-item"><b>${n}</b><span class="num">${fmt(x.close, 2)}</span><span class="num ${dir(x.change_pct)}">${signed(x.change_pct)}%</span></span>`);
-  });
-  Object.entries(d.strategies || {}).forEach(([k, st]) => (st.picks || []).forEach(r => {
-    items.push(`<span class="tape-item"><span class="s" style="background:var(--c-${k}, var(--muted))"></span><b>${esc(r.name)}</b><span class="code">${esc(r.code)}</span><span class="num">${fmt(r.close)}</span><span class="num ${dir(r.change_pct)}">${has(r.change_pct) ? signed(r.change_pct) + '%' : '—'}</span></span>`);
-  }));
-  if (!items.length) { $('tape').hidden = true; return; }
-  const once = items.join('');
-  $('tape-track').innerHTML = once + once.replace(/class="tape-item"/g, 'class="tape-item" aria-hidden="true"');
-}
 
 function renderPicks(k) {
   const s = STRATS[k];
@@ -953,11 +997,12 @@ function renderPicks(k) {
   $('picks').innerHTML = '<div class="pick-grid">' + rows.map((r, i) => {
     const t = dir(r.change_pct);
     const limit = has(r.change_pct) && r.change_pct >= 9.5;
-    return `<article class="pick ${t}" style="--i:${i}">
+    return `<a class="pick ${t}" style="--i:${i}" href="${HASH_PRE}${encodeURIComponent(r.code)}" aria-label="${esc(r.name)} ${esc(r.code)}，查看 K 線與基本資料">
       <div class="row1"><div class="id"><span class="nm">${esc(r.name)}</span><span class="cd">${esc(r.code)}</span>${limit ? '<span class="badge-limit">漲停</span>' : ''}</div><span class="big">${has(r.change_pct) ? `<span data-to="${r.change_pct}" data-dec="2" data-pre="${r.change_pct > 0 ? '+' : ''}">${signed(r.change_pct)}</span>%` : '—'}</span></div>
       <div class="why" title="${esc(r.reason)}">${esc(r.reason)}</div>
       <div class="foot"><div class="tags">${(r.tags || []).map(x => `<span class="tag">${esc(x)}</span>`).join('')}</div><span class="px">收盤 <b>${fmt(r.close)}</b></span></div>
-    </article>`;
+      <span class="go" aria-hidden="true">K 線 · 基本資料 ▸</span>
+    </a>`;
   }).join('') + '</div>';
   countUp($('picks'));
 }
@@ -1015,10 +1060,345 @@ function renderSchedule(d) {
   }).join('');
 }
 
+
+// ================= 個股詳情 =================
+let DATA = null;
+let KCHART = null;
+const STOCK_CACHE = {};
+const INDEX = {
+  TAIEX: { name: '加權指數', key: 'taiex', market: '證交所', links: [['證交所', 'https://www.twse.com.tw/zh/indices/taiex/mi-5min-hist.html'], ['Yahoo 股市', 'https://tw.stock.yahoo.com/quote/%5ETWII']] },
+  OTC: { name: '櫃買指數', key: 'otc', market: '櫃買中心', links: [['櫃買中心', 'https://www.tpex.org.tw/zh-tw/mainboard/trading/info/index.html'], ['Yahoo 股市', 'https://tw.stock.yahoo.com/quote/%5ETWOII']] },
+};
+const stockSrc = (code) => INDEX[code]
+  ? (DEMO ? 'data/example-indices/' : 'data/indices/') + code + '.json'
+  : (DEMO ? 'data/example-stocks/' : 'data/stocks/') + encodeURIComponent(code) + '.json';
+
+// Without an index file, fall back to the 20 closes already in the daily data (no open/high/low).
+function indexFallback(code) {
+  const x = ((DATA || {}).market || {})[INDEX[code].key] || {};
+  const candles = (x.history || []).filter(h => has(h.close)).map(h => ({ date: h.date, close: h.close }));
+  if (!candles.length) throw new Error('這個指數目前沒有走勢資料');
+  return { schema_version: 1, code, name: INDEX[code].name, kind: 'index', partial: true, candles };
+}
+
+function loadStock(code) {
+  if (STOCK_CACHE[code]) return Promise.resolve(STOCK_CACHE[code]);
+  return fetch(stockSrc(code), { cache: 'no-store' })
+    .then(r => { if (!r.ok) throw new Error(r.status === 404 ? '這檔股票還沒有個股資料檔' : `個股資料讀取失敗（${r.status}）`); return r.json(); })
+    .then(j => { if (INDEX[code]) j.kind = 'index'; STOCK_CACHE[code] = j; return j; })
+    .catch(err => { if (INDEX[code]) return indexFallback(code); throw err; });
+}
+
+function findPick(code) {
+  for (const [k, s] of Object.entries((DATA || {}).strategies || {}))
+    for (const p of s.picks || []) if (String(p.code) === String(code)) return { pick: p, key: k, label: s.label || k };
+  return null;
+}
+
+function sma(c, n) {
+  const out = [];
+  let sum = 0;
+  c.forEach((x, i) => {
+    sum += x.close;
+    if (i >= n) sum -= c[i - n].close;
+    if (i >= n - 1) out.push({ time: x.time, value: +(sum / n).toFixed(2) });
+  });
+  return out;
+}
+
+// Merge consecutive bars that share a key into one OHLC bar (first open, max high, min low, last close, summed volume).
+function merge(bars, keyOf) {
+  const out = [];
+  let cur = null, curKey = null;
+  for (const b of bars) {
+    const k = keyOf(b);
+    if (k !== curKey) {
+      if (cur) out.push(cur);
+      cur = { ...b }; curKey = k;
+    } else {
+      cur.high = Math.max(cur.high, b.high); cur.low = Math.min(cur.low, b.low); cur.close = b.close;
+      if (has(b.volume)) cur.volume = (cur.volume || 0) + b.volume;
+      if (has(b.turnover)) cur.turnover = (cur.turnover || 0) + b.turnover;
+      cur.until = b.untilLabel || b.label.slice(5);
+    }
+  }
+  if (cur) out.push(cur);
+  return out;
+}
+const weekKey = (d) => { const t = new Date(d + 'T00:00:00Z'); t.setUTCDate(t.getUTCDate() - ((t.getUTCDay() + 6) % 7)); return t.toISOString().slice(0, 10); };
+
+// Bars for one interval. Daily candles carry 'YYYY-MM-DD'; 5-minute bars carry Taiwan local 'YYYY-MM-DDTHH:MM'
+// (bar start). Intraday times are written as if UTC so the chart's axis reads as Taiwan time.
+function barsFor(k, daily, m5) {
+  if (k === 'd' || k === 'w' || k === 'm') {
+    const base = daily.map(x => ({ ...x, time: x.date, label: x.date.replace(/-/g, '/') }));
+    if (k === 'd') return base;
+    if (k === 'w') return merge(base, b => weekKey(b.date));
+    return merge(base, b => b.date.slice(0, 7)).map(b => ({ ...b, label: b.date.slice(0, 7).replace('-', '/'), until: null }));
+  }
+  const step = { '5m': 5, '15m': 15, '60m': 60 }[k];
+  const base = m5.map(x => {
+    const [d, hm] = x.t.split('T'); const [H, M] = hm.split(':').map(Number);
+    const ts = Date.UTC(+d.slice(0, 4), +d.slice(5, 7) - 1, +d.slice(8, 10), H, M) / 1000;
+    const end = H * 60 + M + 5, untilLabel = `${String(Math.floor(end / 60)).padStart(2, '0')}:${String(end % 60).padStart(2, '0')}`;
+    return { ...x, time: ts, label: `${+d.slice(8, 10)}日 ${hm}`, untilLabel, until: untilLabel, bucket: `${d} ${Math.floor((H * 60 + M - 540) / step)}` };
+  });
+  return step === 5 ? base : merge(base, b => b.bucket);
+}
+const SHOW = { '5m': 54, '15m': 54, '60m': 30, d: 66, w: 52, m: 48 };
+
+function closeSheet() {
+  const b = $('sheet-back');
+  if (b) b.remove();
+  if (KCHART) { KCHART.remove(); KCHART = null; }
+  document.body.classList.remove('locked');
+}
+
+function openSheet(code) {
+  closeSheet();
+  const hit = findPick(code);
+  const back = document.createElement('div');
+  back.className = 'sheet-back'; back.id = 'sheet-back';
+  back.innerHTML = `<section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-head">
+      <div class="who"><h3 id="sheet-title">${esc(hit ? hit.pick.name : INDEX[code] ? INDEX[code].name : code)}</h3><span class="code"${INDEX[code] ? ' hidden' : ''}>${esc(code)}</span><span class="mkt" id="sheet-mkt" hidden></span></div>
+      <div class="quote" id="sheet-quote"></div>
+      <button class="sheet-x" id="sheet-x" type="button" aria-label="關閉">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="kwrap">
+        <div class="ktools">
+          <div class="seg" id="krange" role="group" aria-label="K 線週期">
+            <button type="button" id="kr-m" data-k="m" aria-pressed="false">月K</button>
+            <button type="button" id="kr-w" data-k="w" aria-pressed="false">週K</button>
+            <button type="button" id="kr-d" data-k="d" aria-pressed="true">日K</button>
+            <button type="button" id="kr-60m" data-k="60m" aria-pressed="false">60分</button>
+            <button type="button" id="kr-15m" data-k="15m" aria-pressed="false">15分</button>
+            <button type="button" id="kr-5m" data-k="5m" aria-pressed="false">5分</button>
+          </div>
+          <div class="legend"><span><i style="background:var(--volt)"></i>MA5</span><span><i style="background:var(--mag)"></i>MA20</span><span><i style="background:var(--accent)"></i>MA60</span></div>
+        </div>
+        <div class="kinfo" id="kinfo">&nbsp;</div>
+        <div class="kchart" id="kchart"><div class="empty"><strong>讀取 K 線中…</strong></div></div>
+      </div>
+      <div class="facts" id="facts"></div>
+    </div>
+  </section>`;
+  document.body.appendChild(back);
+  document.body.classList.add('locked');
+  back.addEventListener('click', e => { if (e.target === back) leaveSheet(); });
+  $('sheet-x').addEventListener('click', leaveSheet);
+  $('sheet-x').focus({ preventScroll: true });
+  if (hit) back.querySelector('.sheet').style.setProperty('--s', `var(--c-${hit.key}, var(--volt))`);
+
+  loadStock(code).then(st => {
+    if (!$('sheet-back')) return;
+    if (st.schema_version !== 1) throw new Error(`個股資料格式版本不符（${st.schema_version}）`);
+    fillSheet(st, hit);
+  }).catch(err => {
+    if (!$('sheet-back')) return;
+    $('kchart').innerHTML = empty(err.message || '個股資料讀取失敗', '系統每天收盤後會為入選股票產生個股資料。');
+    fillFacts(null, hit);
+  });
+}
+
+function leaveSheet() {
+  if (/s-/.test(location.hash)) location.hash = DEMO ? 'demo' : '';
+  else closeSheet();
+}
+
+function fillSheet(st, hit) {
+  const all = (st.candles || []).filter(x => has(x.close));
+  const ohlc = all.filter(x => has(x.open) && has(x.high) && has(x.low));
+  const c = ohlc.length ? ohlc : all;
+  const last = c[c.length - 1], prev = c[c.length - 2];
+  if (st.kind === 'index' && INDEX[st.code]) st.market = st.market || INDEX[st.code].market;
+  if (st.market) { $('sheet-mkt').textContent = st.market; $('sheet-mkt').hidden = false; }
+  if (st.name) $('sheet-title').textContent = st.name;
+  if (last) {
+    const ch = prev ? last.close - prev.close : null, pct = prev ? (ch / prev.close) * 100 : null;
+    $('sheet-quote').innerHTML = `<span class="p">${fmt(last.close)}</span><span class="c ${dir(ch)}">${ch > 0 ? '▲' : ch < 0 ? '▼' : ''} ${fmt(Math.abs(ch ?? 0))}　${signed(pct)}%</span>`;
+  }
+  fillFacts(st, hit);
+  if (!c.length) { $('kchart').innerHTML = empty('沒有 K 線資料', ''); return; }
+  if (!window.LightweightCharts) { $('kchart').innerHTML = empty('K 線圖元件載入失敗', '請檢查網路後重新整理。'); return; }
+  drawK(c, { line: !ohlc.length, index: st.kind === 'index', m5: st.intraday_5m || [] });
+}
+
+// Date labels: 2026/10/28 for day, week and month bars; intraday shows only the day and time.
+const pad2 = (n) => String(n).padStart(2, '0');
+function timeParts(t) {
+  if (typeof t === 'number') { const d = new Date(t * 1000); return { y: d.getUTCFullYear(), m: d.getUTCMonth() + 1, d: d.getUTCDate(), hm: `${pad2(d.getUTCHours())}:${pad2(d.getUTCMinutes())}` }; }
+  if (typeof t === 'string') return { y: +t.slice(0, 4), m: +t.slice(5, 7), d: +t.slice(8, 10) };
+  return { y: t.year, m: t.month, d: t.day };
+}
+function timeFormat(k) {
+  const intraday = /^\d+m$/.test(k);
+  return {
+    localization: {
+      locale: 'zh-TW',
+      timeFormatter: (t) => {
+        const p = timeParts(t);
+        if (intraday) return `${p.d}日 ${p.hm}`;
+        if (k === 'm') return `${p.y}/${pad2(p.m)}`;
+        return `${p.y}/${pad2(p.m)}/${pad2(p.d)}`;
+      },
+    },
+    timeScale: {
+      timeVisible: intraday,
+      // TickMarkType: 0 year, 1 month, 2 day, 3 time
+      tickMarkFormatter: (t, type) => {
+        const p = timeParts(t);
+        if (intraday) return type >= 3 ? p.hm : `${p.d}日`;
+        if (type === 0) return String(p.y);
+        if (type === 1) return `${p.y}/${pad2(p.m)}`;
+        return `${pad2(p.m)}/${pad2(p.d)}`;
+      },
+    },
+  };
+}
+
+function drawK(daily, opt = {}) {
+  const box = $('kchart'); box.innerHTML = '';
+  const css = getComputedStyle(document.documentElement);
+  const v = (n) => css.getPropertyValue(n).trim();
+  const LC = window.LightweightCharts;
+  KCHART = LC.createChart(box, {
+    autoSize: true,
+    layout: { background: { type: 'solid', color: 'transparent' }, textColor: v('--muted'), fontFamily: v('--font-num') || 'monospace' },
+    grid: { vertLines: { color: 'rgba(120,110,200,.12)' }, horzLines: { color: 'rgba(120,110,200,.12)' } },
+    rightPriceScale: { borderColor: v('--line') },
+    timeScale: { borderColor: v('--line'), timeVisible: false, secondsVisible: false },
+    crosshair: { mode: LC.CrosshairMode.Normal },
+    localization: { locale: 'zh-TW' },
+  });
+  const up = v('--up'), down = v('--down');
+  // Stocks: volume in 張. Indices: turnover in 億元.
+  const vkey = opt.index ? 'turnover' : 'volume', vdiv = opt.index ? 1e8 : 1000;
+  const vol = KCHART.addHistogramSeries({ priceScaleId: 'vol', priceFormat: { type: 'volume' }, lastValueVisible: false, priceLineVisible: false });
+  KCHART.priceScale('vol').applyOptions({ scaleMargins: { top: .8, bottom: 0 } });
+  const keyOfTime = (t) => typeof t === 'object' ? `${t.year}-${String(t.month).padStart(2, '0')}-${String(t.day).padStart(2, '0')}` : t;
+
+  if (opt.line) {
+    // Close-only fallback: too few days for intervals or moving averages.
+    document.querySelector('.ktools').hidden = true;
+    const col = daily[daily.length - 1].close >= daily[0].close ? up : down;
+    const area = KCHART.addAreaSeries({ lineColor: col, topColor: col + '55', bottomColor: col + '00', lineWidth: 2, priceLineVisible: false });
+    area.priceScale().applyOptions({ scaleMargins: { top: .06, bottom: .24 } });
+    area.setData(daily.map(x => ({ time: x.date, value: x.close })));
+    const byDate = Object.fromEntries(daily.map(x => [x.date, x]));
+    KCHART.applyOptions(timeFormat('d'));
+    const info = (x) => { $('kinfo').innerHTML = x ? `<b>${esc(x.date.replace(/-/g, '/'))}</b>收 <b>${fmt(x.close)}</b>` : '&nbsp;'; };
+    info(daily[daily.length - 1]);
+    KCHART.subscribeCrosshairMove(p => info(p && p.time !== undefined ? byDate[keyOfTime(p.time)] : daily[daily.length - 1]));
+    KCHART.timeScale().fitContent();
+    return;
+  }
+
+  const candles = KCHART.addCandlestickSeries({ upColor: up, downColor: down, borderUpColor: up, borderDownColor: down, wickUpColor: up, wickDownColor: down, priceLineVisible: false });
+  candles.priceScale().applyOptions({ scaleMargins: { top: .06, bottom: .24 } });
+  const mas = [[5, v('--volt')], [20, v('--mag')], [60, v('--accent')]].map(([n, col]) => [n,
+    KCHART.addLineSeries({ color: col, lineWidth: 1, priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false })]);
+  const m5 = (opt.m5 || []).filter(x => x.t && has(x.open) && has(x.high) && has(x.low) && has(x.close));
+  document.querySelectorAll('#krange button').forEach(b => {
+    b.disabled = /^\d+m$/.test(b.dataset.k) && !m5.length;
+    b.title = b.disabled ? '還沒有分 K 資料' : '';
+  });
+
+  let bars = [], byTime = {};
+  const info = (x) => {
+    if (!x) { $('kinfo').innerHTML = '&nbsp;'; return; }
+    const amount = opt.index
+      ? `金額 <b>${has(x.turnover) ? fmt(x.turnover / 1e8, x.turnover < 1e10 ? 1 : 0) + ' 億' : '—'}</b>`
+      : `量 <b>${has(x.volume) ? fmt(Math.round(x.volume / 1000), 0) + ' 張' : '—'}</b>`;
+    const when = x.until ? `${x.label}～${x.until}` : x.label;
+    $('kinfo').innerHTML = `<b>${esc(when)}</b>開 <b>${fmt(x.open)}</b>高 <b>${fmt(x.high)}</b>低 <b>${fmt(x.low)}</b>收 <b class="${x.close >= x.open ? 'up' : 'down'}">${fmt(x.close)}</b>${amount}`;
+  };
+  KCHART.subscribeCrosshairMove(p => info(p && p.time !== undefined ? byTime[keyOfTime(p.time)] : bars[bars.length - 1]));
+
+  const show = (k) => {
+    bars = barsFor(k, daily, m5);
+    byTime = Object.fromEntries(bars.map(b => [keyOfTime(b.time), b]));
+    document.querySelectorAll('#krange button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k ? 'true' : 'false'));
+    KCHART.applyOptions(timeFormat(k));
+    candles.setData(bars.map(x => ({ time: x.time, open: x.open, high: x.high, low: x.low, close: x.close })));
+    vol.setData(bars.filter(x => has(x[vkey])).map(x => ({ time: x.time, value: x[vkey] / vdiv, color: (x.close >= x.open ? up : down) + '66' })));
+    mas.forEach(([n, s]) => s.setData(bars.length >= n ? sma(bars, n) : []));
+    info(bars[bars.length - 1]);
+    const n = SHOW[k] || 66;
+    KCHART.timeScale().setVisibleLogicalRange({ from: Math.max(0, bars.length - n) - .5, to: bars.length - .5 });
+  };
+  document.querySelectorAll('#krange button').forEach(b => { b.onclick = () => { if (!b.disabled) show(b.dataset.k); }; });
+  show('d');
+}
+
+function fillFacts(st, hit) {
+  const c = st ? (st.candles || []).filter(x => has(x.close)) : [];
+  const last = c[c.length - 1];
+  const tail = (n) => c.slice(-n);
+  const hi = (a) => a.length ? Math.max(...a.map(x => x.high ?? x.close)) : null;
+  const lo = (a) => a.length ? Math.min(...a.map(x => x.low ?? x.close)) : null;
+  const avgVol = (n) => { const a = tail(n).filter(x => has(x.volume)); return a.length ? a.reduce((t, x) => t + x.volume, 0) / a.length / 1000 : null; };
+  const f = (st && st.fundamentals) || {};
+  const row = (k, val) => `<dt>${k}</dt><dd>${has(val) && val !== '' ? val : '<span class="na">—</span>'}</dd>`;
+  const pct = (x) => has(x) ? fmt(x, 2) + '%' : null;
+  const n2 = (x) => has(x) ? fmt(x, 2) : null;
+  const vol = last && has(last.volume) ? fmt(Math.round(last.volume / 1000), 0) + '<small>張</small>' : null;
+  const amt = last && has(last.turnover) ? fmt(last.turnover / 1e8, 2) + '<small>億</small>' : null;
+  // 52 weeks ≈ 250 trading days; shorter histories say how many days they cover.
+  const yr = c.slice(-250);
+  const span = c.length >= 250 ? '52 週' : `近 ${c.length} 日`;
+  let html = '';
+  if (st && st.kind === 'index') {
+    const first = yr[0];
+    const chg = first && last ? (last.close / first.close - 1) * 100 : null;
+    const avgAmt = (() => { const a = tail(20).filter(x => has(x.turnover)); return a.length ? a.reduce((t, x) => t + x.turnover, 0) / a.length / 1e8 : null; })();
+    const info = INDEX[st.code] || { links: [] };
+    $('facts').innerHTML = (st.partial ? `<p class="partial-note">目前只有近 ${c.length} 日收盤價，所以畫成走勢線。後端提供指數的開高低收後，這裡會改成 K 線。</p>` : '') +
+      `<div><h4>今日行情</h4><dl class="kv">
+        ${row('開盤', last && has(last.open) ? fmt(last.open, 2) : null)}${row('最高', last && has(last.high) ? fmt(last.high, 2) : null)}${row('最低', last && has(last.low) ? fmt(last.low, 2) : null)}
+        ${row('成交金額', last && has(last.turnover) ? fmt(last.turnover / 1e8, 0) + '<small>億</small>' : null)}${row('20 日均額', has(avgAmt) ? fmt(avgAmt, 0) + '<small>億</small>' : null)}
+      </dl></div>
+      <div><h4>區間統計 · ${span}</h4><dl class="kv">
+        ${row('最高', yr.length ? fmt(hi(yr), 2) : null)}${row('最低', yr.length ? fmt(lo(yr), 2) : null)}
+        ${row('區間漲跌', has(chg) ? `<span class="${dir(chg)}">${signed(chg)}%</span>` : null)}
+      </dl></div>
+      <div><h4>更多資訊</h4><div class="links">${info.links.map(([t, u]) => `<a href="${u}" target="_blank" rel="noopener">${t}</a>`).join('')}</div></div>`;
+    return;
+  }
+  if (hit) {
+    html += `<div><h4>入選原因 · ${esc(hit.label)}</h4><div class="why-box">${esc(hit.pick.reason)}</div>
+      <div class="tags" style="margin-top:6px">${(hit.pick.tags || []).map(x => `<span class="tag">${esc(x)}</span>`).join('')}</div></div>`;
+  }
+  html += `<div><h4>今日行情</h4><dl class="kv">
+      ${row('開盤', last ? fmt(last.open) : null)}${row('最高', last ? fmt(last.high) : null)}${row('最低', last ? fmt(last.low) : null)}
+      ${row('成交量', vol)}${row('成交金額', amt)}${row('20 日均量', has(avgVol(20)) ? fmt(Math.round(avgVol(20)), 0) + '<small>張</small>' : null)}
+      ${row(span + '最高', yr.length ? fmt(hi(yr)) : null)}${row(span + '最低', yr.length ? fmt(lo(yr)) : null)}
+    </dl></div>`;
+  html += `<div><h4>基本資料${f.date ? ` <small style="color:var(--muted);letter-spacing:0">${esc(f.date.slice(5).replace('-', '/'))}</small>` : ''}</h4><dl class="kv">
+      ${row('市場', st && st.market)}${row('產業', st && st.industry)}${row('上市日期', st && st.listed_on)}
+      ${row('本益比', n2(f.pe))}${row('股價淨值比', n2(f.pb))}${row('殖利率', pct(f.dividend_yield))}
+    </dl></div>`;
+  const code = encodeURIComponent((st && st.code) || (hit && hit.pick.code) || '');
+  html += `<div><h4>更多資訊</h4><div class="links">
+      <a href="https://tw.stock.yahoo.com/quote/${code}" target="_blank" rel="noopener">Yahoo 股市</a>
+      <a href="https://goodinfo.tw/tw/StockDetail.asp?STOCK_ID=${code}" target="_blank" rel="noopener">Goodinfo</a>
+      <a href="https://mops.twse.com.tw/mops/web/t05st03?co_id=${code}" target="_blank" rel="noopener">公開資訊觀測站</a>
+    </div></div>`;
+  $('facts').innerHTML = html;
+}
+
+function route() {
+  const m = /s-([0-9A-Za-z]+)$/.exec(location.hash);
+  if (m && DATA) openSheet(decodeURIComponent(m[1])); else closeSheet();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('sheet-back')) leaveSheet(); });
+
 function render(d) {
+  DATA = d;
   if (DEMO) showNotice('示範資料：這些股票、價格與數字都是範例，不是系統實際輸出。<a href="#" id="exit-demo">看實際資料</a>', 'warn');
   if (d.generated_at) $('footer').textContent = `資料產生時間 ${d.generated_at.replace('T', ' ').slice(0, 16)}　·　` + $('footer').textContent;
-  renderHeader(d); renderMood(d); renderTape(d); renderTickers(d); renderStrategies(d); renderMarket(d); renderGate(d); renderSchedule(d); renderBackfill(d);
+  renderHeader(d); renderMood(d); renderTickers(d); renderStrategies(d); renderMarket(d); renderGate(d); renderSchedule(d); renderBackfill(d);
   countUp(document);
 }
 
@@ -1028,7 +1408,6 @@ function renderMissing(reason) {
   showNotice(`${esc(reason)}。系統每天 18:45 收盤後流程跑完會自動更新這一頁。<a href="#demo">先看範例畫面</a>`, 'warn');
   ['picks', 'market', 'gate'].forEach(id => $(id).innerHTML = empty('等待第一份資料', ''));
   $('tabs').hidden = true;
-  $('tape').hidden = true;
   $('channel').hidden = true;
   $('tickers').hidden = true;
   $('idx-seg').hidden = true;
@@ -1039,13 +1418,14 @@ function renderMissing(reason) {
 
 document.addEventListener('click', e => { if (e.target.id === 'exit-demo') { e.preventDefault(); location.hash = ''; } });
 
-addEventListener('hashchange', () => location.reload());
+addEventListener('hashchange', () => { if (location.hash.startsWith('#demo') !== DEMO) location.reload(); else route(); });
 
 fetch(SRC, { cache: 'no-store' })
   .then(r => { if (!r.ok) throw new Error(r.status === 404 ? '找不到資料檔' : `資料讀取失敗（${r.status}）`); return r.json(); })
   .then(d => {
     if (d.schema_version !== 1) throw new Error(`資料格式版本不符（${d.schema_version}）`);
     render(d);
+    route();
   })
   .catch(err => renderMissing(err.message || '資料讀取失敗'));
 </script>

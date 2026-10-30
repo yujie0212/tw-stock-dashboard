@@ -11,13 +11,13 @@
 
 要換回某一版，跟 Claude 說「把正式網站改成 previews/檔名 那一版」即可。
 
-## 儲存點（git tag）
+## 儲存點（備份分支）
 
-正式網站每次換風格前後都打了 tag，可以直接把 `index.html` 還原到該 tag：
+正式網站每次換風格，都會把當下的狀態存成一個 `backup/` 分支。分支不會隨正式網站變動，可以隨時拿回來：
 
-| tag | 正式網站的樣子 |
+| 分支 | 正式網站的樣子 |
 |---|---|
-| `style-v3-board` | 活潑版 v3（報價看板、選股卡片） |
-| `style-v4-cyberpunk` | 賽博龐克版 |
+| `backup/style-v3-board` | 活潑版 v3（報價看板、選股卡片） |
+| `backup/style-v4-cyberpunk` | 賽博龐克版 |
 
-還原方式：`git checkout <tag> -- index.html`，再 commit 推上去。
+還原方式：`git checkout origin/<分支> -- index.html`，再 commit 推上去；或直接跟 Claude 說「還原到 v3」。

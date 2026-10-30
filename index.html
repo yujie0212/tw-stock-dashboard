@@ -1305,10 +1305,10 @@ function drawK(daily, opt = {}) {
     b.title = b.disabled ? '還沒有分 K 資料' : '';
   });
 
-  let bars = [], byTime = {};
+  let bars = [], byTime = {}, hasVol = false;
   const info = (x) => {
     if (!x) { $('kinfo').innerHTML = '&nbsp;'; return; }
-    const amount = opt.index
+    const amount = !hasVol ? '' : opt.index
       ? `金額 <b>${has(x.turnover) ? fmt(x.turnover / 1e8, x.turnover < 1e10 ? 1 : 0) + ' 億' : '—'}</b>`
       : `量 <b>${has(x.volume) ? fmt(Math.round(x.volume / 1000), 0) + ' 張' : '—'}</b>`;
     const when = x.until ? `${x.label}～${x.until}` : x.label;
@@ -1322,7 +1322,10 @@ function drawK(daily, opt = {}) {
     document.querySelectorAll('#krange button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === k ? 'true' : 'false'));
     KCHART.applyOptions(timeFormat(k));
     candles.setData(bars.map(x => ({ time: x.time, open: x.open, high: x.high, low: x.low, close: x.close })));
-    vol.setData(bars.filter(x => has(x[vkey])).map(x => ({ time: x.time, value: x[vkey] / vdiv, color: (x.close >= x.open ? up : down) + '66' })));
+    // Index files may carry no turnover, and index 5-minute bars are price-only: drop the volume pane then.
+    hasVol = bars.some(x => has(x[vkey]));
+    vol.setData(hasVol ? bars.filter(x => has(x[vkey])).map(x => ({ time: x.time, value: x[vkey] / vdiv, color: (x.close >= x.open ? up : down) + '66' })) : []);
+    candles.priceScale().applyOptions({ scaleMargins: { top: .06, bottom: hasVol ? .24 : .06 } });
     mas.forEach(([n, s]) => s.setData(bars.length >= n ? sma(bars, n) : []));
     info(bars[bars.length - 1]);
     const n = SHOW[k] || 66;
@@ -1357,7 +1360,7 @@ function fillFacts(st, hit) {
     $('facts').innerHTML = (st.partial ? `<p class="partial-note">目前只有近 ${c.length} 日收盤價，所以畫成走勢線。後端提供指數的開高低收後，這裡會改成 K 線。</p>` : '') +
       `<div><h4>今日行情</h4><dl class="kv">
         ${row('開盤', last && has(last.open) ? fmt(last.open, 2) : null)}${row('最高', last && has(last.high) ? fmt(last.high, 2) : null)}${row('最低', last && has(last.low) ? fmt(last.low, 2) : null)}
-        ${row('成交金額', last && has(last.turnover) ? fmt(last.turnover / 1e8, 0) + '<small>億</small>' : null)}${row('20 日均額', has(avgAmt) ? fmt(avgAmt, 0) + '<small>億</small>' : null)}
+        ${c.some(x => has(x.turnover)) ? row('成交金額', last && has(last.turnover) ? fmt(last.turnover / 1e8, 0) + '<small>億</small>' : null) + row('20 日均額', has(avgAmt) ? fmt(avgAmt, 0) + '<small>億</small>' : null) : ''}
       </dl></div>
       <div><h4>區間統計 · ${span}</h4><dl class="kv">
         ${row('最高', yr.length ? fmt(hi(yr), 2) : null)}${row('最低', yr.length ? fmt(lo(yr), 2) : null)}

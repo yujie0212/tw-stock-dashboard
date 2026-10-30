@@ -129,3 +129,9 @@
 | `candles` | 日 K，由舊到新，建議至少 500 個交易日（週 K、月 K 由網頁從日 K 合併）：`[{date, open, high, low, close, volume, turnover}]`。原始價（未還原）。`volume` 單位**股**（網頁 ÷1000 顯示張數），`turnover` 單位**元**。指數沒有 `volume`，只給 `turnover` |
 | `intraday_5m` | 最近 5 個交易日的 5 分 K，由舊到新：`[{t, open, high, low, close, volume, turnover}]`，`t` 為**台灣時間**該根的開始時間 `YYYY-MM-DDTHH:MM`（09:00～13:25）。15 分、60 分 K 由網頁合併。沒有分鐘資料時省略或給空陣列，網頁會停用分 K 按鈕 |
 | `fundamentals` | 個股：`{date, pe, pb, dividend_yield}`，本益比、股價淨值比、殖利率（%），`date` 為資料日 |
+
+目前後端實際提供的內容（2026-10-30）：
+
+- 指數日 K 只有開高低收，沒有 `turnover`；網頁會隱藏成交金額與下方的量柱。
+- `TAIEX.json` 有 `intraday_5m`（只有開高低收）；`OTC.json` 沒有，櫃買指數的分 K 按鈕會停用。
+- 個股沒有 `intraday_5m`（分 K 需付費來源），個股的分 K 按鈕會停用。

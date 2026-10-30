@@ -546,7 +546,10 @@ function renderHeader(d) {
   const pp = $('pipeline-pill');
   const [cls, label] = STATUS[p.status] || ['idle', '狀態不明'];
   pp.className = 'pill ' + cls;
-  pp.textContent = `收盤後流程${label}${p.finished_at ? ' ' + p.finished_at : ''}`;
+  // The file carries no run name; the pre-open run finishes before the 13:30 close, the after-close run after it.
+  const hour = Number(((d.generated_at || '').match(/T(\d\d):/) || [])[1]);
+  const run = isFinite(hour) && hour < 13 ? '盤前流程' : '收盤後流程';
+  pp.textContent = `${run}${label}${p.finished_at ? ' ' + p.finished_at : ''}`;
   const cp = $('channel-pill');
   cp.hidden = false;
   if (d.channel === 'live') { cp.className = 'pill ok'; cp.textContent = '正式推播'; }

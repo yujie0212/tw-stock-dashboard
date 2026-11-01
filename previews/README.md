@@ -22,5 +22,10 @@
 | `backup/style-v4-cyberpunk` | 賽博龐克版 |
 | `backup/style-v5-kline` | 賽博龐克版＋個股／指數 K 線詳情 |
 | `backup/before-portfolio` | 加上「我的持股」分頁之前 |
+| `backup/style-cyberpunk` | 換成 Apple 家庭風格之前的賽博龐克版 |
 
 還原方式：`git checkout origin/<分支> -- index.html`，再 commit 推上去；或直接跟 Claude 說「還原到 v3」。
+
+## 賽博龐克版
+
+根目錄的 `cyberpunk.html` 是換成 Apple 家庭風格前的正式網站，讀同一份資料，可以直接打開使用：`https://yujie0212.github.io/tw-stock-dashboard/cyberpunk.html`。之後的新功能只會加在 `index.html`。

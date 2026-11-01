@@ -1167,6 +1167,10 @@ main::before { display: none; }
 .np-sub { color: rgba(255, 255, 255, .92); text-shadow: 0 1px 8px rgba(0, 0, 0, .3); }
 .mood-kicker, .brand .date { text-shadow: 0 1px 8px rgba(0, 0, 0, .25); }
 .sheet.np { animation: none; }
+
+/* hidden holdings tab: shown only while it is open */
+.views a[data-v="pf"]:not([aria-current="page"]) { display: none; }
+.views a { touch-action: manipulation; -webkit-user-select: none; user-select: none; }
 </style>
 </head>
 <body>
@@ -2402,6 +2406,16 @@ function showView() {
 
 document.querySelector('.views a[data-v="mkt"]').href = DEMO ? '#demo' : '#';
 document.querySelector('.views a[data-v="pf"]').href = DEMO ? '#demo-pf' : '#pf';
+// The holdings tab is hidden: three quick taps on 大盤選股 open it.
+(() => {
+  const mkt = document.querySelector('.views a[data-v="mkt"]');
+  let taps = [];
+  mkt.addEventListener('click', (e) => {
+    const now = performance.now();
+    taps = taps.filter(t => now - t < 700).concat(now);
+    if (taps.length >= 3) { e.preventDefault(); taps = []; location.hash = DEMO ? 'demo-pf' : 'pf'; }
+  });
+})();
 showView();
 addEventListener('hashchange', () => { if (location.hash.startsWith('#demo') !== DEMO) location.reload(); else { showView(); route(); } });
 

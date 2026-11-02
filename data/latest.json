@@ -1,28 +1,151 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-02T08:30:46+08:00",
+  "generated_at": "2026-11-02T18:51:40+08:00",
   "trade_date": "2026-11-02",
-  "universe_count": null,
+  "universe_count": 1984,
   "channel": "test",
   "pipeline": {
-    "status": "failed",
-    "finished_at": null,
-    "error": "流程結果無法解析"
+    "status": "done",
+    "finished_at": "18:51",
+    "error": null
   },
   "strategies": {
     "short": {
       "label": "短線",
       "status": "active",
-      "holding": null,
-      "note": "今日報告未產生",
-      "picks": []
+      "holding": "1–5 個交易日",
+      "note": null,
+      "picks": [
+        {
+          "code": "6697",
+          "name": "東捷資訊",
+          "close": 59.7,
+          "change_pct": 9.94,
+          "reason": "收盤高於前 20 日最高價 9.9%，5 日均量為 20 日的 3.6 倍",
+          "tags": [
+            "外資賣超"
+          ],
+          "big_holder_pct": 61.11,
+          "big_holder_week_change": 0.0
+        },
+        {
+          "code": "6233",
+          "name": "旺玖",
+          "close": 35.2,
+          "change_pct": 10.0,
+          "reason": "收盤高於前 20 日最高價 3.8%，5 日均量為 20 日的 3.3 倍",
+          "tags": [
+            "外資連 5 買"
+          ],
+          "big_holder_pct": 24.23,
+          "big_holder_week_change": 4.68
+        },
+        {
+          "code": "2491",
+          "name": "吉祥全",
+          "close": 44.55,
+          "change_pct": 10.0,
+          "reason": "收盤高於前 20 日最高價 0.3%，5 日均量為 20 日的 2.2 倍",
+          "tags": [
+            "外資買超"
+          ],
+          "big_holder_pct": 66.92,
+          "big_holder_week_change": -0.22
+        },
+        {
+          "code": "5013",
+          "name": "強新",
+          "close": 60.6,
+          "change_pct": 9.98,
+          "reason": "收盤高於前 20 日最高價 3.4%，5 日均量為 20 日的 1.6 倍",
+          "tags": [
+            "外資連 2 買"
+          ],
+          "big_holder_pct": 81.7,
+          "big_holder_week_change": -0.14
+        },
+        {
+          "code": "1232",
+          "name": "大統益",
+          "close": 164.0,
+          "change_pct": 4.13,
+          "reason": "收盤高於前 20 日最高價 2.5%，5 日均量為 20 日的 1.8 倍",
+          "tags": [
+            "外資連 2 買"
+          ],
+          "big_holder_pct": 72.03,
+          "big_holder_week_change": 0.0
+        }
+      ]
     },
     "swing": {
       "label": "波段",
       "status": "active",
-      "holding": null,
-      "note": "今日報告未產生",
-      "picks": []
+      "holding": "1–4 週",
+      "note": null,
+      "picks": [
+        {
+          "code": "6233",
+          "name": "旺玖",
+          "close": 35.2,
+          "change_pct": 10.0,
+          "reason": "近 60 日相對大盤 +71.6%，近 5 日法人買超 5 天",
+          "tags": [
+            "外資連 5 買"
+          ],
+          "big_holder_pct": 24.23,
+          "big_holder_week_change": 4.68
+        },
+        {
+          "code": "4563",
+          "name": "百德",
+          "close": 62.9,
+          "change_pct": 9.97,
+          "reason": "近 60 日相對大盤 +58.7%，近 5 日法人買超 4 天",
+          "tags": [
+            "外資連 3 買"
+          ],
+          "big_holder_pct": 49.6,
+          "big_holder_week_change": 0.0
+        },
+        {
+          "code": "6199",
+          "name": "天品",
+          "close": 162.5,
+          "change_pct": 1.25,
+          "reason": "近 60 日相對大盤 +64.7%，近 5 日法人買超 3 天",
+          "tags": [
+            "外資連 2 賣"
+          ],
+          "big_holder_pct": 74.79,
+          "big_holder_week_change": 0.41
+        },
+        {
+          "code": "4533",
+          "name": "協易機",
+          "close": 29.5,
+          "change_pct": 4.98,
+          "reason": "近 60 日相對大盤 +22.5%，近 5 日法人買超 4 天",
+          "tags": [
+            "外資連 3 買"
+          ],
+          "big_holder_pct": 33.16,
+          "big_holder_week_change": -0.05
+        },
+        {
+          "code": "2801",
+          "name": "彰銀",
+          "close": 30.85,
+          "change_pct": 0.49,
+          "reason": "近 60 日相對大盤 +17.9%，近 5 日法人買超 5 天",
+          "tags": [
+            "外資連 8 買",
+            "投信連 2 買"
+          ],
+          "big_holder_pct": 74.74,
+          "big_holder_week_change": 0.15
+        }
+      ]
     },
     "long": {
       "label": "中長線",
@@ -34,22 +157,195 @@
   },
   "market": {
     "taiex": {
-      "close": null,
-      "change": null,
-      "change_pct": null,
-      "history": []
+      "close": 44920.14,
+      "change": -291.69,
+      "change_pct": -0.65,
+      "history": [
+        {
+          "date": "2026-10-01",
+          "close": 48353.49
+        },
+        {
+          "date": "2026-10-02",
+          "close": 48475.74
+        },
+        {
+          "date": "2026-10-05",
+          "close": 49712.04
+        },
+        {
+          "date": "2026-10-06",
+          "close": 49822.55
+        },
+        {
+          "date": "2026-10-07",
+          "close": 49806.37
+        },
+        {
+          "date": "2026-10-08",
+          "close": 49313.44
+        },
+        {
+          "date": "2026-10-12",
+          "close": 49301.96
+        },
+        {
+          "date": "2026-10-13",
+          "close": 48341.31
+        },
+        {
+          "date": "2026-10-14",
+          "close": 48625.83
+        },
+        {
+          "date": "2026-10-15",
+          "close": 46969.87
+        },
+        {
+          "date": "2026-10-16",
+          "close": 47111.26
+        },
+        {
+          "date": "2026-10-19",
+          "close": 46822.08
+        },
+        {
+          "date": "2026-10-20",
+          "close": 46292.93
+        },
+        {
+          "date": "2026-10-21",
+          "close": 46887.77
+        },
+        {
+          "date": "2026-10-22",
+          "close": 46041.43
+        },
+        {
+          "date": "2026-10-27",
+          "close": 46096.23
+        },
+        {
+          "date": "2026-10-28",
+          "close": 47035.58
+        },
+        {
+          "date": "2026-10-29",
+          "close": 46368.33
+        },
+        {
+          "date": "2026-10-30",
+          "close": 45211.83
+        },
+        {
+          "date": "2026-11-02",
+          "close": 44920.14
+        }
+      ]
     },
     "otc": {
-      "close": null,
-      "change": null,
-      "change_pct": null,
-      "history": []
+      "close": 369.24,
+      "change": -1.02,
+      "change_pct": -0.28,
+      "history": [
+        {
+          "date": "2026-10-01",
+          "close": 418.82
+        },
+        {
+          "date": "2026-10-02",
+          "close": 426.93
+        },
+        {
+          "date": "2026-10-05",
+          "close": 432.48
+        },
+        {
+          "date": "2026-10-06",
+          "close": 430.86
+        },
+        {
+          "date": "2026-10-07",
+          "close": 430.46
+        },
+        {
+          "date": "2026-10-08",
+          "close": 426.71
+        },
+        {
+          "date": "2026-10-12",
+          "close": 427.9
+        },
+        {
+          "date": "2026-10-13",
+          "close": 414.31
+        },
+        {
+          "date": "2026-10-14",
+          "close": 420.13
+        },
+        {
+          "date": "2026-10-15",
+          "close": 396.9
+        },
+        {
+          "date": "2026-10-16",
+          "close": 400.26
+        },
+        {
+          "date": "2026-10-19",
+          "close": 394.05
+        },
+        {
+          "date": "2026-10-20",
+          "close": 387.88
+        },
+        {
+          "date": "2026-10-21",
+          "close": 395.42
+        },
+        {
+          "date": "2026-10-22",
+          "close": 381.69
+        },
+        {
+          "date": "2026-10-27",
+          "close": 379.2
+        },
+        {
+          "date": "2026-10-28",
+          "close": 394.61
+        },
+        {
+          "date": "2026-10-29",
+          "close": 387.37
+        },
+        {
+          "date": "2026-10-30",
+          "close": 370.26
+        },
+        {
+          "date": "2026-11-02",
+          "close": 369.24
+        }
+      ]
     },
     "institutional": {
       "foreign": null,
       "trust": null,
       "dealer": null
-    }
+    },
+    "margin": {
+      "date": "2026-10-30",
+      "balance_100m": 8287.7,
+      "change_100m": -151.0
+    },
+    "fx": {
+      "date": "2026-10-30",
+      "usd_twd": 32.478,
+      "usd_twd_change_pct": -0.04
+    },
+    "big_holder_week": "2026-10-30"
   },
   "validation": {
     "status": "failed",
@@ -212,6 +508,12 @@
       "time": "18:45",
       "name": "收盤後流程",
       "detail": "抓行情、法人、指數 → 選股 → 推播",
+      "status": "done"
+    },
+    {
+      "time": "明日",
+      "name": "盤前訊息",
+      "detail": "08:07，備援 08:29",
       "status": "scheduled"
     }
   ],

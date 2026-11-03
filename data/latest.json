@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-03T08:29:50+08:00",
-  "trade_date": "2026-11-02",
+  "generated_at": "2026-11-03T18:52:03+08:00",
+  "trade_date": "2026-11-03",
   "universe_count": 1984,
   "channel": "test",
   "pipeline": {
     "status": "done",
-    "finished_at": "08:29",
+    "finished_at": "18:52",
     "error": null
   },
   "strategies": {
@@ -17,61 +17,49 @@
       "note": null,
       "picks": [
         {
-          "code": "6697",
-          "name": "東捷資訊",
-          "close": 59.7,
-          "change_pct": 9.94,
-          "reason": "收盤高於前 20 日最高價 9.9%，5 日均量為 20 日的 3.6 倍",
-          "tags": [
-            "外資賣超"
-          ],
-          "big_holder_pct": 61.11,
-          "big_holder_week_change": 0.0
-        },
-        {
-          "code": "6233",
-          "name": "旺玖",
-          "close": 35.2,
-          "change_pct": 10.0,
-          "reason": "收盤高於前 20 日最高價 3.8%，5 日均量為 20 日的 3.3 倍",
-          "tags": [
-            "外資連 5 買"
-          ],
-          "big_holder_pct": 24.23,
-          "big_holder_week_change": 4.68
-        },
-        {
-          "code": "2491",
-          "name": "吉祥全",
-          "close": 44.55,
-          "change_pct": 10.0,
-          "reason": "收盤高於前 20 日最高價 0.3%，5 日均量為 20 日的 2.2 倍",
-          "tags": [
-            "外資買超"
-          ],
-          "big_holder_pct": 66.92,
-          "big_holder_week_change": -0.22
-        },
-        {
           "code": "5013",
           "name": "強新",
-          "close": 60.6,
-          "change_pct": 9.98,
-          "reason": "收盤高於前 20 日最高價 3.4%，5 日均量為 20 日的 1.6 倍",
+          "close": 66.6,
+          "change_pct": 9.9,
+          "reason": "收盤高於前 20 日最高價 9.9%，5 日均量為 20 日的 1.9 倍",
           "tags": [
-            "外資連 2 買"
+            "外資連 3 買"
           ],
           "big_holder_pct": 81.7,
           "big_holder_week_change": -0.14
         },
         {
-          "code": "1232",
-          "name": "大統益",
-          "close": 164.0,
-          "change_pct": 4.13,
-          "reason": "收盤高於前 20 日最高價 2.5%，5 日均量為 20 日的 1.8 倍",
+          "code": "2465",
+          "name": "麗臺",
+          "close": 114.0,
+          "change_pct": 1.79,
+          "reason": "收盤高於前 20 日最高價 0.9%，5 日均量為 20 日的 2.4 倍",
+          "tags": [
+            "外資連 2 賣"
+          ],
+          "big_holder_pct": 38.3,
+          "big_holder_week_change": 7.77
+        },
+        {
+          "code": "5202",
+          "name": "力新",
+          "close": 16.3,
+          "change_pct": 9.76,
+          "reason": "收盤高於前 20 日最高價 3.2%，5 日均量為 20 日的 1.8 倍",
           "tags": [
             "外資連 2 買"
+          ],
+          "big_holder_pct": 48.73,
+          "big_holder_week_change": 0.06
+        },
+        {
+          "code": "1232",
+          "name": "大統益",
+          "close": 165.5,
+          "change_pct": 0.91,
+          "reason": "收盤高於前 20 日最高價 0.3%，5 日均量為 20 日的 1.9 倍",
+          "tags": [
+            "外資連 3 買"
           ],
           "big_holder_pct": 72.03,
           "big_holder_week_change": 0.0
@@ -85,65 +73,67 @@
       "note": null,
       "picks": [
         {
+          "code": "5013",
+          "name": "強新",
+          "close": 66.6,
+          "change_pct": 9.9,
+          "reason": "近 60 日相對大盤 +177.5%，近 5 日法人買超 4 天",
+          "tags": [
+            "外資連 3 買"
+          ],
+          "big_holder_pct": 81.7,
+          "big_holder_week_change": -0.14
+        },
+        {
           "code": "6233",
           "name": "旺玖",
-          "close": 35.2,
-          "change_pct": 10.0,
-          "reason": "近 60 日相對大盤 +71.6%，近 5 日法人買超 5 天",
+          "close": 31.7,
+          "change_pct": -9.94,
+          "reason": "近 60 日相對大盤 +62.1%，近 5 日法人買超 4 天",
           "tags": [
-            "外資連 5 買"
+            "外資賣超"
           ],
           "big_holder_pct": 24.23,
           "big_holder_week_change": 4.68
         },
         {
-          "code": "4563",
-          "name": "百德",
-          "close": 62.9,
-          "change_pct": 9.97,
-          "reason": "近 60 日相對大盤 +58.7%，近 5 日法人買超 4 天",
-          "tags": [
-            "外資連 3 買"
-          ],
-          "big_holder_pct": 49.6,
-          "big_holder_week_change": 0.0
-        },
-        {
-          "code": "6199",
-          "name": "天品",
-          "close": 162.5,
-          "change_pct": 1.25,
-          "reason": "近 60 日相對大盤 +64.7%，近 5 日法人買超 3 天",
-          "tags": [
-            "外資連 2 賣"
-          ],
-          "big_holder_pct": 74.79,
-          "big_holder_week_change": 0.41
-        },
-        {
-          "code": "4533",
-          "name": "協易機",
-          "close": 29.5,
-          "change_pct": 4.98,
-          "reason": "近 60 日相對大盤 +22.5%，近 5 日法人買超 4 天",
-          "tags": [
-            "外資連 3 買"
-          ],
-          "big_holder_pct": 33.16,
-          "big_holder_week_change": -0.05
-        },
-        {
           "code": "2801",
           "name": "彰銀",
-          "close": 30.85,
-          "change_pct": 0.49,
-          "reason": "近 60 日相對大盤 +17.9%，近 5 日法人買超 5 天",
+          "close": 29.7,
+          "change_pct": -3.73,
+          "reason": "近 60 日相對大盤 +18.0%，近 5 日法人買超 5 天",
           "tags": [
-            "外資連 8 買",
-            "投信連 2 買"
+            "外資連 9 買",
+            "投信連 3 買"
           ],
           "big_holder_pct": 74.74,
           "big_holder_week_change": 0.15
+        },
+        {
+          "code": "2891",
+          "name": "中信金",
+          "close": 74.2,
+          "change_pct": -1.07,
+          "reason": "近 60 日相對大盤 +14.6%，近 5 日法人買超 5 天",
+          "tags": [
+            "外資連 2 賣",
+            "投信連 3 買"
+          ],
+          "big_holder_pct": 79.55,
+          "big_holder_week_change": 0.11
+        },
+        {
+          "code": "9904",
+          "name": "寶成",
+          "close": 25.9,
+          "change_pct": 0.19,
+          "reason": "近 60 日相對大盤 +9.2%，近 5 日法人買超 4 天",
+          "tags": [
+            "外資連 4 買",
+            "投信賣超"
+          ],
+          "big_holder_pct": 64.36,
+          "big_holder_week_change": -0.11
         }
       ]
     },
@@ -157,14 +147,10 @@
   },
   "market": {
     "taiex": {
-      "close": 44920.14,
-      "change": -291.69,
-      "change_pct": -0.65,
+      "close": 43307.54,
+      "change": -1612.6,
+      "change_pct": -3.59,
       "history": [
-        {
-          "date": "2026-10-01",
-          "close": 48353.49
-        },
         {
           "date": "2026-10-02",
           "close": 48475.74
@@ -240,18 +226,18 @@
         {
           "date": "2026-11-02",
           "close": 44920.14
+        },
+        {
+          "date": "2026-11-03",
+          "close": 43307.54
         }
       ]
     },
     "otc": {
-      "close": 369.24,
-      "change": -1.02,
-      "change_pct": -0.28,
+      "close": 345.52,
+      "change": -23.72,
+      "change_pct": -6.42,
       "history": [
-        {
-          "date": "2026-10-01",
-          "close": 418.82
-        },
         {
           "date": "2026-10-02",
           "close": 426.93
@@ -327,6 +313,10 @@
         {
           "date": "2026-11-02",
           "close": 369.24
+        },
+        {
+          "date": "2026-11-03",
+          "close": 345.52
         }
       ]
     },
@@ -502,12 +492,18 @@
       "time": "08:07",
       "name": "盤前訊息",
       "detail": "備援 08:29",
-      "status": "sent"
+      "status": "done"
     },
     {
       "time": "18:45",
       "name": "收盤後流程",
       "detail": "抓行情、法人、指數 → 選股 → 推播",
+      "status": "done"
+    },
+    {
+      "time": "明日",
+      "name": "盤前訊息",
+      "detail": "08:07，備援 08:29",
       "status": "scheduled"
     }
   ],

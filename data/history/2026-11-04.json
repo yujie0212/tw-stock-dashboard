@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-04T20:15:43+08:00",
+  "generated_at": "2026-11-05T08:09:57+08:00",
   "trade_date": "2026-11-04",
   "universe_count": 1984,
   "channel": "test",
   "pipeline": {
     "status": "done",
-    "finished_at": "20:15",
+    "finished_at": "08:09",
     "error": null
   },
   "strategies": {
@@ -323,14 +323,14 @@
       "dealer": null
     },
     "margin": {
-      "date": "2026-11-03",
-      "balance_100m": 7963.4,
-      "change_100m": -307.7
+      "date": "2026-11-04",
+      "balance_100m": 7878.7,
+      "change_100m": -84.7
     },
     "fx": {
-      "date": "2026-11-03",
-      "usd_twd": 32.76,
-      "usd_twd_change_pct": 0.52
+      "date": "2026-11-04",
+      "usd_twd": 32.821,
+      "usd_twd_change_pct": 0.19
     },
     "big_holder_week": "2026-10-30"
   },
@@ -489,18 +489,12 @@
       "time": "08:07",
       "name": "盤前訊息",
       "detail": "備援 08:29",
-      "status": "done"
+      "status": "sent"
     },
     {
       "time": "18:45",
       "name": "收盤後流程",
       "detail": "抓行情、法人、指數 → 選股 → 推播",
-      "status": "done"
-    },
-    {
-      "time": "明日",
-      "name": "盤前訊息",
-      "detail": "08:07，備援 08:29",
       "status": "scheduled"
     }
   ],

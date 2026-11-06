@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-06T08:29:51+08:00",
-  "trade_date": "2026-11-05",
+  "generated_at": "2026-11-06T18:53:21+08:00",
+  "trade_date": "2026-11-06",
   "universe_count": 1984,
   "channel": "test",
   "pipeline": {
     "status": "done",
-    "finished_at": "08:29",
+    "finished_at": "18:53",
     "error": null
   },
   "strategies": {
@@ -19,65 +19,27 @@
         {
           "code": "1416",
           "name": "廣豐",
-          "close": 14.9,
-          "change_pct": 5.3,
-          "reason": "收盤高於前 20 日最高價 3.5%，5 日均量為 20 日的 2.3 倍",
+          "close": 16.35,
+          "change_pct": 9.73,
+          "reason": "收盤高於前 20 日最高價 5.1%，5 日均量為 20 日的 2.9 倍",
           "tags": [
-            "外資買超"
+            "外資連 2 買"
           ],
           "big_holder_pct": 51.4,
           "big_holder_week_change": -0.48
         },
         {
-          "code": "6708",
-          "name": "天擎",
-          "close": 75.7,
-          "change_pct": 9.24,
-          "reason": "收盤高於前 20 日最高價 0.4%，5 日均量為 20 日的 1.6 倍",
+          "code": "1476",
+          "name": "儒鴻",
+          "close": 346.5,
+          "change_pct": 2.06,
+          "reason": "收盤高於前 20 日最高價 1.5%，5 日均量為 20 日的 1.5 倍",
           "tags": [
-            "外資連 4 買"
+            "外資連 2 買",
+            "投信連 5 買"
           ],
-          "big_holder_pct": 42.47,
-          "big_holder_week_change": 0.0
-        },
-        {
-          "code": "2610",
-          "name": "華航",
-          "close": 21.65,
-          "change_pct": 5.61,
-          "reason": "收盤高於前 20 日最高價 2.1%，5 日均量為 20 日的 1.7 倍",
-          "tags": [
-            "外資連 6 買",
-            "投信連 2 買"
-          ],
-          "big_holder_pct": 70.86,
-          "big_holder_week_change": -0.05
-        },
-        {
-          "code": "2618",
-          "name": "長榮航",
-          "close": 45.1,
-          "change_pct": 3.09,
-          "reason": "收盤高於前 20 日最高價 1.1%，5 日均量為 20 日的 1.5 倍",
-          "tags": [
-            "外資連 6 買",
-            "投信買超"
-          ],
-          "big_holder_pct": 80.59,
-          "big_holder_week_change": 0.16
-        },
-        {
-          "code": "2501",
-          "name": "國建",
-          "close": 21.05,
-          "change_pct": 4.47,
-          "reason": "收盤高於前 20 日最高價 0.7%，5 日均量為 20 日的 1.5 倍",
-          "tags": [
-            "外資買超",
-            "投信連 2 買"
-          ],
-          "big_holder_pct": 71.6,
-          "big_holder_week_change": 0.17
+          "big_holder_pct": 71.17,
+          "big_holder_week_change": -0.38
         }
       ]
     },
@@ -88,65 +50,65 @@
       "note": null,
       "picks": [
         {
-          "code": "6233",
-          "name": "旺玖",
-          "close": 30.2,
-          "change_pct": -3.82,
-          "reason": "近 60 日相對大盤 +64.8%，近 5 日法人買超 3 天",
+          "code": "5013",
+          "name": "強新",
+          "close": 62.0,
+          "change_pct": 4.55,
+          "reason": "近 60 日相對大盤 +161.6%，近 5 日法人買超 3 天",
           "tags": [
-            "外資賣超"
+            "外資買超"
           ],
-          "big_holder_pct": 24.23,
-          "big_holder_week_change": 4.68
+          "big_holder_pct": 81.7,
+          "big_holder_week_change": -0.14
         },
         {
           "code": "1416",
           "name": "廣豐",
-          "close": 14.9,
-          "change_pct": 5.3,
-          "reason": "近 60 日相對大盤 +45.0%，近 5 日法人買超 3 天",
+          "close": 16.35,
+          "change_pct": 9.73,
+          "reason": "近 60 日相對大盤 +58.9%，近 5 日法人買超 3 天",
           "tags": [
-            "外資買超"
+            "外資連 2 買"
           ],
           "big_holder_pct": 51.4,
           "big_holder_week_change": -0.48
         },
         {
-          "code": "6609",
-          "name": "瀧澤科",
-          "close": 44.6,
-          "change_pct": -7.47,
-          "reason": "近 60 日相對大盤 +34.5%，近 5 日法人買超 3 天",
+          "code": "6233",
+          "name": "旺玖",
+          "close": 29.4,
+          "change_pct": -2.65,
+          "reason": "近 60 日相對大盤 +62.6%，近 5 日法人買超 3 天",
           "tags": [
-            "外資賣超"
+            "外資買超"
           ],
-          "big_holder_pct": 55.53,
-          "big_holder_week_change": -0.03
+          "big_holder_pct": 24.23,
+          "big_holder_week_change": 4.68
         },
         {
-          "code": "4533",
-          "name": "協易機",
-          "close": 28.7,
-          "change_pct": -8.01,
-          "reason": "近 60 日相對大盤 +33.1%，近 5 日法人買超 3 天",
+          "code": "2618",
+          "name": "長榮航",
+          "close": 43.6,
+          "change_pct": -3.33,
+          "reason": "近 60 日相對大盤 +8.4%，近 5 日法人買超 5 天",
           "tags": [
-            "外資賣超"
+            "外資連 7 買",
+            "投信連 2 買"
           ],
-          "big_holder_pct": 33.16,
-          "big_holder_week_change": -0.05
+          "big_holder_pct": 80.59,
+          "big_holder_week_change": 0.16
         },
         {
-          "code": "2884",
-          "name": "玉山金",
-          "close": 47.95,
-          "change_pct": 0.74,
-          "reason": "近 60 日相對大盤 +32.7%，近 5 日法人買超 5 天",
+          "code": "6782",
+          "name": "視陽",
+          "close": 274.5,
+          "change_pct": 3.39,
+          "reason": "近 60 日相對大盤 +36.1%，近 5 日法人買超 4 天",
           "tags": [
-            "外資賣超",
-            "投信連 5 買"
+            "外資買超"
           ],
-          "big_holder_pct": 70.78,
-          "big_holder_week_change": 0.06
+          "big_holder_pct": 38.68,
+          "big_holder_week_change": 2.29
         }
       ]
     },
@@ -160,14 +122,10 @@
   },
   "market": {
     "taiex": {
-      "close": 41574.72,
-      "change": -1374.19,
-      "change_pct": -3.2,
+      "close": 39701.64,
+      "change": -1873.08,
+      "change_pct": -4.51,
       "history": [
-        {
-          "date": "2026-10-06",
-          "close": 49822.55
-        },
         {
           "date": "2026-10-07",
           "close": 49806.37
@@ -243,18 +201,18 @@
         {
           "date": "2026-11-05",
           "close": 41574.72
+        },
+        {
+          "date": "2026-11-06",
+          "close": 39701.64
         }
       ]
     },
     "otc": {
-      "close": 321.47,
-      "change": -22.03,
-      "change_pct": -6.41,
+      "close": 304.02,
+      "change": -17.45,
+      "change_pct": -5.43,
       "history": [
-        {
-          "date": "2026-10-06",
-          "close": 430.86
-        },
         {
           "date": "2026-10-07",
           "close": 430.46
@@ -330,6 +288,10 @@
         {
           "date": "2026-11-05",
           "close": 321.47
+        },
+        {
+          "date": "2026-11-06",
+          "close": 304.02
         }
       ]
     },
@@ -505,12 +467,18 @@
       "time": "08:07",
       "name": "盤前訊息",
       "detail": "備援 08:29",
-      "status": "sent"
+      "status": "done"
     },
     {
       "time": "18:45",
       "name": "收盤後流程",
       "detail": "抓行情、法人、指數 → 選股 → 推播",
+      "status": "done"
+    },
+    {
+      "time": "明日",
+      "name": "盤前訊息",
+      "detail": "08:07，備援 08:29",
       "status": "scheduled"
     }
   ],

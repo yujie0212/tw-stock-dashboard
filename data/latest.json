@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-09T08:11:10+08:00",
+  "generated_at": "2026-11-09T08:30:30+08:00",
   "trade_date": "2026-11-06",
   "universe_count": 1984,
   "channel": "test",
   "pipeline": {
     "status": "done",
-    "finished_at": "08:11",
+    "finished_at": "08:30",
     "error": null
   },
   "strategies": {
@@ -306,9 +306,9 @@
       "change_100m": -564.2
     },
     "fx": {
-      "date": "2026-11-05",
-      "usd_twd": 32.876,
-      "usd_twd_change_pct": 0.17
+      "date": "2026-11-06",
+      "usd_twd": 32.768,
+      "usd_twd_change_pct": -0.33
     },
     "big_holder_week": "2026-11-06"
   },

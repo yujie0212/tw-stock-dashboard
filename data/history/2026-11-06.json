@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-06T20:15:57+08:00",
+  "generated_at": "2026-11-09T08:11:10+08:00",
   "trade_date": "2026-11-06",
   "universe_count": 1984,
   "channel": "test",
   "pipeline": {
     "status": "done",
-    "finished_at": "20:15",
+    "finished_at": "08:11",
     "error": null
   },
   "strategies": {
@@ -25,8 +25,8 @@
           "tags": [
             "外資連 2 買"
           ],
-          "big_holder_pct": 51.4,
-          "big_holder_week_change": -0.48
+          "big_holder_pct": 52.88,
+          "big_holder_week_change": 1.48
         },
         {
           "code": "1476",
@@ -38,8 +38,8 @@
             "外資連 2 買",
             "投信連 5 買"
           ],
-          "big_holder_pct": 71.17,
-          "big_holder_week_change": -0.38
+          "big_holder_pct": 71.38,
+          "big_holder_week_change": 0.21
         }
       ]
     },
@@ -58,8 +58,8 @@
           "tags": [
             "外資買超"
           ],
-          "big_holder_pct": 81.7,
-          "big_holder_week_change": -0.14
+          "big_holder_pct": 80.65,
+          "big_holder_week_change": -1.05
         },
         {
           "code": "1416",
@@ -70,8 +70,8 @@
           "tags": [
             "外資連 2 買"
           ],
-          "big_holder_pct": 51.4,
-          "big_holder_week_change": -0.48
+          "big_holder_pct": 52.88,
+          "big_holder_week_change": 1.48
         },
         {
           "code": "6233",
@@ -82,8 +82,8 @@
           "tags": [
             "外資買超"
           ],
-          "big_holder_pct": 24.23,
-          "big_holder_week_change": 4.68
+          "big_holder_pct": 25.1,
+          "big_holder_week_change": 0.87
         },
         {
           "code": "2618",
@@ -95,8 +95,8 @@
             "外資連 7 買",
             "投信連 2 買"
           ],
-          "big_holder_pct": 80.59,
-          "big_holder_week_change": 0.16
+          "big_holder_pct": 81.52,
+          "big_holder_week_change": 0.93
         },
         {
           "code": "6782",
@@ -107,8 +107,8 @@
           "tags": [
             "外資買超"
           ],
-          "big_holder_pct": 38.68,
-          "big_holder_week_change": 2.29
+          "big_holder_pct": 38.94,
+          "big_holder_week_change": 0.26
         }
       ]
     },
@@ -301,16 +301,16 @@
       "dealer": null
     },
     "margin": {
-      "date": "2026-11-05",
-      "balance_100m": 7604.5,
-      "change_100m": -274.2
+      "date": "2026-11-06",
+      "balance_100m": 7040.3,
+      "change_100m": -564.2
     },
     "fx": {
       "date": "2026-11-05",
       "usd_twd": 32.876,
       "usd_twd_change_pct": 0.17
     },
-    "big_holder_week": "2026-10-30"
+    "big_holder_week": "2026-11-06"
   },
   "validation": {
     "status": "failed",
@@ -467,18 +467,12 @@
       "time": "08:07",
       "name": "盤前訊息",
       "detail": "備援 08:29",
-      "status": "done"
+      "status": "sent"
     },
     {
       "time": "18:45",
       "name": "收盤後流程",
       "detail": "抓行情、法人、指數 → 選股 → 推播",
-      "status": "done"
-    },
-    {
-      "time": "明日",
-      "name": "盤前訊息",
-      "detail": "08:07，備援 08:29",
       "status": "scheduled"
     }
   ],

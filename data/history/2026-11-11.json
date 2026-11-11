@@ -1,0 +1,558 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-11T18:53:35+08:00",
+  "trade_date": "2026-11-11",
+  "universe_count": 1984,
+  "channel": "test",
+  "pipeline": {
+    "status": "done",
+    "finished_at": "18:53",
+    "error": null
+  },
+  "strategies": {
+    "short": {
+      "label": "短線",
+      "status": "active",
+      "holding": "1–5 個交易日",
+      "note": null,
+      "picks": [
+        {
+          "code": "1416",
+          "name": "廣豐",
+          "close": 20.15,
+          "change_pct": 9.81,
+          "reason": "收盤高於前 20 日最高價 2.3%，5 日均量為 20 日的 3.4 倍",
+          "tags": [
+            "外資連 5 買"
+          ],
+          "big_holder_pct": 52.88,
+          "big_holder_week_change": 1.48
+        },
+        {
+          "code": "6112",
+          "name": "邁達特",
+          "close": 58.0,
+          "change_pct": 1.75,
+          "reason": "收盤高於前 20 日最高價 0.7%，5 日均量為 20 日的 2.4 倍",
+          "tags": [
+            "外資賣超"
+          ],
+          "big_holder_pct": 55.69,
+          "big_holder_week_change": 0.0
+        },
+        {
+          "code": "2471",
+          "name": "資通",
+          "close": 59.8,
+          "change_pct": 9.93,
+          "reason": "收盤高於前 20 日最高價 3.6%，5 日均量為 20 日的 3.5 倍",
+          "tags": [
+            "外資連 4 買"
+          ],
+          "big_holder_pct": 6.74,
+          "big_holder_week_change": 0.0
+        },
+        {
+          "code": "2610",
+          "name": "華航",
+          "close": 23.5,
+          "change_pct": 3.07,
+          "reason": "收盤高於前 20 日最高價 2.6%，5 日均量為 20 日的 2.3 倍",
+          "tags": [
+            "外資連 10 買",
+            "投信買超"
+          ],
+          "big_holder_pct": 72.15,
+          "big_holder_week_change": 1.29
+        },
+        {
+          "code": "6148",
+          "name": "驊宏資",
+          "close": 53.1,
+          "change_pct": 9.94,
+          "reason": "收盤高於前 20 日最高價 9.9%，5 日均量為 20 日的 1.9 倍",
+          "tags": [
+            "外資賣超"
+          ],
+          "big_holder_pct": 33.68,
+          "big_holder_week_change": 0.0
+        }
+      ]
+    },
+    "swing": {
+      "label": "波段",
+      "status": "active",
+      "holding": "1–4 週",
+      "note": null,
+      "picks": [
+        {
+          "code": "1416",
+          "name": "廣豐",
+          "close": 20.15,
+          "change_pct": 9.81,
+          "reason": "近 60 日相對大盤 +79.5%，近 5 日法人買超 5 天",
+          "tags": [
+            "外資連 5 買"
+          ],
+          "big_holder_pct": 52.88,
+          "big_holder_week_change": 1.48
+        },
+        {
+          "code": "6870",
+          "name": "騰雲",
+          "close": 493.5,
+          "change_pct": 9.91,
+          "reason": "近 60 日相對大盤 +106.4%，近 5 日法人買超 4 天",
+          "tags": [
+            "外資連 3 買"
+          ],
+          "big_holder_pct": 52.14,
+          "big_holder_week_change": -0.56
+        },
+        {
+          "code": "5230",
+          "name": "雷笛克光學",
+          "close": 33.9,
+          "change_pct": 9.89,
+          "reason": "近 60 日相對大盤 +99.1%，近 5 日法人買超 5 天",
+          "tags": [
+            "外資連 5 買"
+          ],
+          "big_holder_pct": 10.27,
+          "big_holder_week_change": 0.0
+        },
+        {
+          "code": "2033",
+          "name": "佳大",
+          "close": 74.6,
+          "change_pct": 0.13,
+          "reason": "近 60 日相對大盤 +241.9%，近 5 日法人買超 3 天",
+          "tags": [
+            "外資連 2 買"
+          ],
+          "big_holder_pct": 77.52,
+          "big_holder_week_change": 0.06
+        },
+        {
+          "code": "2465",
+          "name": "麗臺",
+          "close": 149.5,
+          "change_pct": 9.93,
+          "reason": "近 60 日相對大盤 +59.3%，近 5 日法人買超 5 天",
+          "tags": [
+            "外資連 3 買"
+          ],
+          "big_holder_pct": 33.26,
+          "big_holder_week_change": -5.04
+        }
+      ]
+    },
+    "long": {
+      "label": "中長線",
+      "status": "paused",
+      "holding": null,
+      "note": "暫停正式推播：季財報資料與研究驗證完成前不提供此策略名單",
+      "picks": []
+    }
+  },
+  "market": {
+    "taiex": {
+      "close": 44257.15,
+      "change": 1545.23,
+      "change_pct": 3.62,
+      "history": [
+        {
+          "date": "2026-10-13",
+          "close": 48341.31
+        },
+        {
+          "date": "2026-10-14",
+          "close": 48625.83
+        },
+        {
+          "date": "2026-10-15",
+          "close": 46969.87
+        },
+        {
+          "date": "2026-10-16",
+          "close": 47111.26
+        },
+        {
+          "date": "2026-10-19",
+          "close": 46822.08
+        },
+        {
+          "date": "2026-10-20",
+          "close": 46292.93
+        },
+        {
+          "date": "2026-10-21",
+          "close": 46887.77
+        },
+        {
+          "date": "2026-10-22",
+          "close": 46041.43
+        },
+        {
+          "date": "2026-10-27",
+          "close": 46096.23
+        },
+        {
+          "date": "2026-10-28",
+          "close": 47035.58
+        },
+        {
+          "date": "2026-10-29",
+          "close": 46368.33
+        },
+        {
+          "date": "2026-10-30",
+          "close": 45211.83
+        },
+        {
+          "date": "2026-11-02",
+          "close": 44920.14
+        },
+        {
+          "date": "2026-11-03",
+          "close": 43307.54
+        },
+        {
+          "date": "2026-11-04",
+          "close": 42948.91
+        },
+        {
+          "date": "2026-11-05",
+          "close": 41574.72
+        },
+        {
+          "date": "2026-11-06",
+          "close": 39701.64
+        },
+        {
+          "date": "2026-11-09",
+          "close": 41661.7
+        },
+        {
+          "date": "2026-11-10",
+          "close": 42711.92
+        },
+        {
+          "date": "2026-11-11",
+          "close": 44257.15
+        }
+      ]
+    },
+    "otc": {
+      "close": 344.11,
+      "change": 11.14,
+      "change_pct": 3.35,
+      "history": [
+        {
+          "date": "2026-10-13",
+          "close": 414.31
+        },
+        {
+          "date": "2026-10-14",
+          "close": 420.13
+        },
+        {
+          "date": "2026-10-15",
+          "close": 396.9
+        },
+        {
+          "date": "2026-10-16",
+          "close": 400.26
+        },
+        {
+          "date": "2026-10-19",
+          "close": 394.05
+        },
+        {
+          "date": "2026-10-20",
+          "close": 387.88
+        },
+        {
+          "date": "2026-10-21",
+          "close": 395.42
+        },
+        {
+          "date": "2026-10-22",
+          "close": 381.69
+        },
+        {
+          "date": "2026-10-27",
+          "close": 379.2
+        },
+        {
+          "date": "2026-10-28",
+          "close": 394.61
+        },
+        {
+          "date": "2026-10-29",
+          "close": 387.37
+        },
+        {
+          "date": "2026-10-30",
+          "close": 370.26
+        },
+        {
+          "date": "2026-11-02",
+          "close": 369.24
+        },
+        {
+          "date": "2026-11-03",
+          "close": 345.52
+        },
+        {
+          "date": "2026-11-04",
+          "close": 343.5
+        },
+        {
+          "date": "2026-11-05",
+          "close": 321.47
+        },
+        {
+          "date": "2026-11-06",
+          "close": 304.02
+        },
+        {
+          "date": "2026-11-09",
+          "close": 321.97
+        },
+        {
+          "date": "2026-11-10",
+          "close": 332.97
+        },
+        {
+          "date": "2026-11-11",
+          "close": 344.11
+        }
+      ]
+    },
+    "institutional": {
+      "foreign": null,
+      "trust": null,
+      "dealer": null
+    },
+    "margin": {
+      "date": "2026-11-10",
+      "balance_100m": 7059.9,
+      "change_100m": -40.7
+    },
+    "fx": {
+      "date": "2026-11-10",
+      "usd_twd": 32.865,
+      "usd_twd_change_pct": -0.05
+    },
+    "big_holder_week": "2026-11-06"
+  },
+  "validation": {
+    "status": "failed",
+    "note": null,
+    "rules": [
+      "每段期間、每個持有天數都要通過，策略才算通過",
+      "每段至少 30 筆完整結果（其中至少 30 筆可和大盤比較）",
+      "扣除手續費與證交稅後，平均報酬大於 0",
+      "平均超額報酬（減去大盤）大於 0"
+    ],
+    "strategies": {
+      "short": {
+        "label": "短線",
+        "status": "failed",
+        "periods": [
+          {
+            "label": "2023 H2–2024 · 1 日",
+            "excess_return_pct": -0.93,
+            "net_return_pct": -0.87,
+            "samples": 1718,
+            "passed": false
+          },
+          {
+            "label": "2023 H2–2024 · 3 日",
+            "excess_return_pct": -0.82,
+            "net_return_pct": -0.65,
+            "samples": 1693,
+            "passed": false
+          },
+          {
+            "label": "2023 H2–2024 · 5 日",
+            "excess_return_pct": -0.73,
+            "net_return_pct": -0.47,
+            "samples": 1672,
+            "passed": false
+          },
+          {
+            "label": "2025 · 1 日",
+            "excess_return_pct": -0.8,
+            "net_return_pct": -0.75,
+            "samples": 1106,
+            "passed": false
+          },
+          {
+            "label": "2025 · 3 日",
+            "excess_return_pct": -0.82,
+            "net_return_pct": -0.68,
+            "samples": 1086,
+            "passed": false
+          },
+          {
+            "label": "2025 · 5 日",
+            "excess_return_pct": -0.59,
+            "net_return_pct": -0.37,
+            "samples": 1065,
+            "passed": false
+          },
+          {
+            "label": "2026 · 1 日",
+            "excess_return_pct": -0.84,
+            "net_return_pct": -0.6,
+            "samples": 791,
+            "passed": false
+          },
+          {
+            "label": "2026 · 3 日",
+            "excess_return_pct": -1.1,
+            "net_return_pct": -0.34,
+            "samples": 770,
+            "passed": false
+          },
+          {
+            "label": "2026 · 5 日",
+            "excess_return_pct": -1.0,
+            "net_return_pct": 0.2,
+            "samples": 754,
+            "passed": false
+          }
+        ]
+      },
+      "swing": {
+        "label": "波段",
+        "status": "failed",
+        "periods": [
+          {
+            "label": "2023 H2–2024 · 5 日",
+            "excess_return_pct": -0.63,
+            "net_return_pct": -0.32,
+            "samples": 1670,
+            "passed": false
+          },
+          {
+            "label": "2023 H2–2024 · 10 日",
+            "excess_return_pct": -0.43,
+            "net_return_pct": 0.21,
+            "samples": 1613,
+            "passed": false
+          },
+          {
+            "label": "2023 H2–2024 · 20 日",
+            "excess_return_pct": -0.51,
+            "net_return_pct": 1.03,
+            "samples": 1504,
+            "passed": false
+          },
+          {
+            "label": "2025 · 5 日",
+            "excess_return_pct": -1.24,
+            "net_return_pct": -1.18,
+            "samples": 1076,
+            "passed": false
+          },
+          {
+            "label": "2025 · 10 日",
+            "excess_return_pct": -1.7,
+            "net_return_pct": -1.36,
+            "samples": 1039,
+            "passed": false
+          },
+          {
+            "label": "2025 · 20 日",
+            "excess_return_pct": -1.05,
+            "net_return_pct": -0.33,
+            "samples": 962,
+            "passed": false
+          },
+          {
+            "label": "2026 · 5 日",
+            "excess_return_pct": -2.64,
+            "net_return_pct": -1.29,
+            "samples": 765,
+            "passed": false
+          },
+          {
+            "label": "2026 · 10 日",
+            "excess_return_pct": -1.73,
+            "net_return_pct": 1.34,
+            "samples": 709,
+            "passed": false
+          },
+          {
+            "label": "2026 · 20 日",
+            "excess_return_pct": -0.04,
+            "net_return_pct": 6.13,
+            "samples": 628,
+            "passed": false
+          }
+        ]
+      }
+    }
+  },
+  "schedule": [
+    {
+      "time": "08:07",
+      "name": "盤前訊息",
+      "detail": "備援 08:29",
+      "status": "done"
+    },
+    {
+      "time": "18:45",
+      "name": "收盤後流程",
+      "detail": "抓行情、法人、指數 → 選股 → 推播",
+      "status": "done"
+    },
+    {
+      "time": "明日",
+      "name": "盤前訊息",
+      "detail": "08:07，備援 08:29",
+      "status": "scheduled"
+    }
+  ],
+  "backfill": [
+    {
+      "name": "行情",
+      "status": "pending",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": null,
+      "note": null
+    },
+    {
+      "name": "法人買賣超",
+      "status": "done",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": "2025-09 → 2026-09",
+      "note": null
+    },
+    {
+      "name": "指數",
+      "status": "done",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": "2023-01 → 2026-09",
+      "note": null
+    },
+    {
+      "name": "回測",
+      "status": "done",
+      "done": null,
+      "total": null,
+      "unit": null,
+      "range": "2023-07 → 2026-09",
+      "note": null
+    }
+  ]
+}

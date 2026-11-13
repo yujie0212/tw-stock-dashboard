@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-13T22:00:52+08:00",
+  "generated_at": "2026-11-13T22:15:26+08:00",
   "trade_date": "2026-11-13",
   "universe_count": 1984,
   "channel": "test",
   "pipeline": {
     "status": "done",
-    "finished_at": "22:00",
+    "finished_at": "22:15",
     "error": null
   },
   "strategies": {

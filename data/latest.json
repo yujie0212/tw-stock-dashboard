@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-23T08:30:49+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-23T20:15:51+08:00",
+  "trade_date": "2026-11-23",
   "universe_count": 1984,
   "channel": "test",
   "pipeline": {
     "status": "done",
-    "finished_at": "08:30",
+    "finished_at": "20:15",
     "error": null
   },
   "strategies": {
@@ -34,14 +34,10 @@
   },
   "market": {
     "taiex": {
-      "close": 36033.29,
-      "change": -2393.6,
-      "change_pct": -6.23,
+      "close": 36811.89,
+      "change": 778.6,
+      "change_pct": 2.16,
       "history": [
-        {
-          "date": "2026-10-21",
-          "close": 46887.77
-        },
         {
           "date": "2026-10-22",
           "close": 46041.43
@@ -117,18 +113,18 @@
         {
           "date": "2026-11-20",
           "close": 36033.29
+        },
+        {
+          "date": "2026-11-23",
+          "close": 36811.89
         }
       ]
     },
     "otc": {
-      "close": 263.31,
-      "change": -22.02,
-      "change_pct": -7.72,
+      "close": 270.9,
+      "change": 7.59,
+      "change_pct": 2.88,
       "history": [
-        {
-          "date": "2026-10-21",
-          "close": 395.42
-        },
         {
           "date": "2026-10-22",
           "close": 381.69
@@ -204,6 +200,10 @@
         {
           "date": "2026-11-20",
           "close": 263.31
+        },
+        {
+          "date": "2026-11-23",
+          "close": 270.9
         }
       ]
     },
@@ -379,12 +379,18 @@
       "time": "08:07",
       "name": "盤前訊息",
       "detail": "備援 08:29",
-      "status": "sent"
+      "status": "done"
     },
     {
       "time": "18:45",
       "name": "收盤後流程",
       "detail": "抓行情、法人、指數 → 選股 → 推播",
+      "status": "done"
+    },
+    {
+      "time": "明日",
+      "name": "盤前訊息",
+      "detail": "08:07，備援 08:29",
       "status": "scheduled"
     }
   ],
